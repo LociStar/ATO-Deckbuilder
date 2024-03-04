@@ -5,6 +5,8 @@ import AppBar from "./components/AppBar.tsx";
 import CardsView from "./screens/CardsView.tsx";
 import {useState} from "preact/hooks";
 import CharBuilds from "./screens/CharBuilds.tsx";
+import {oidcConfig} from "./config.tsx";
+import {AuthProvider} from "react-oidc-context";
 
 declare module '@mui/material/styles' {
     interface Theme {
@@ -46,12 +48,14 @@ export function App() {
 
     return (
         <div className="App">
+            <AuthProvider {...oidcConfig}>
             <ThemeProvider theme={theme}>
                 <CssBaseline/>
                 <AppBar setSearchQuery={setSearchQuery}/>
                 {/*<CardsView searchQuery={searchQuery}/>*/}
                 <CharBuilds/>
             </ThemeProvider>
+            </AuthProvider>
         </div>
     );
 }
