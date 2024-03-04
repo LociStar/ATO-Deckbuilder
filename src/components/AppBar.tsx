@@ -16,6 +16,9 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import {useState} from 'preact/hooks';
 import {JSX} from 'preact';
+import {useAuth} from "react-oidc-context";
+import RenderOnAuthenticated from "./conditionals/RenderOnAuthenticated.tsx";
+import RenderOnAnonymous from "./conditionals/RenderOnAnonymous.tsx";
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -65,6 +68,8 @@ export default function PrimarySearchAppBar({setSearchQuery}: { setSearchQuery: 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+    const auth = useAuth();
+
     const handleProfileMenuOpen = (event: JSX.TargetedMouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -99,8 +104,14 @@ export default function PrimarySearchAppBar({setSearchQuery}: { setSearchQuery: 
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+            <RenderOnAuthenticated>
+                <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+                <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+                <MenuItem onClick={() => {setAnchorEl(null); handleMobileMenuClose(); return void auth.signoutSilent()}}>Log out</MenuItem>
+            </RenderOnAuthenticated>
+            <RenderOnAnonymous>
+                <MenuItem onClick={() => {setAnchorEl(null); handleMobileMenuClose(); return void auth.signinRedirect()}}>Log in</MenuItem>
+            </RenderOnAnonymous>
         </Menu>
     );
 
