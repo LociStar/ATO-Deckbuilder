@@ -1,46 +1,72 @@
 .app {
-  text-align: center;
+    text-align: center;
 }
 
 .app-logo {
-  height: 40vmin;
-  pointer-events: none;
+    height: 40vmin;
+    pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .app-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+    .app-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
 }
 
 .app-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
 }
 
 .app-link {
-  color: #61dafb;
+    color: #61dafb;
 }
 
 @keyframes app-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
-/*.MuiCardMedia-root {*/
-/*  height: 50px;*/
-/*}*/
+.zoomEffect {
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    z-index: 0; /* reset z-index */
+}
 
-/*.MuiCardMedia-img {*/
-/*  transform: scale(0.5);*/
-/*}*/
+@keyframes pulse {
+    0% {
+        filter: drop-shadow(0 0 10px #00beff)
+        drop-shadow(0 0 15px #00beff)
+        drop-shadow(0 0 20px #00beff);
+    }
+    50% {
+        filter: drop-shadow(0 0 12px #00beff)
+        drop-shadow(0 0 17px #00beff)
+        drop-shadow(0 0 22px #00beff);
+    }
+    100% {
+        filter: drop-shadow(0 0 10px #00beff)
+        drop-shadow(0 0 15px #00beff)
+        drop-shadow(0 0 20px #00beff);
+    }
+}
+
+.zoomEffect:hover {
+    transform: scale(1.1);
+    animation: pulse 2s infinite;
+    z-index: 1; /* bring to front on hover */
+}
+
+.zoomEffect:active {
+    opacity: 0.5;
+}
