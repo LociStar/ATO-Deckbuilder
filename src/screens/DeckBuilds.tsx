@@ -5,11 +5,11 @@ import {CharBuild} from "../types/types";
 import AddIcon from '@mui/icons-material/Add';
 import Box from "@mui/material/Box";
 
-export default function CharBuilds() {
+export default function DeckBuilds() {
     const [charBuilds, setCharBuilds] = useState<CharBuild[]>([]);
 
     useEffect(() => {
-        fetch('http://localhost:8080/char')
+        fetch('http://localhost:8080/deck')
             .then(response => response.json())
             .then(data => setCharBuilds(data));
     }, []);
