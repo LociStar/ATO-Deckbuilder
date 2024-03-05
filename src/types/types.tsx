@@ -12,3 +12,14 @@ export type CharBuild = {
     userName: string;
     likes: number;
 };
+
+export type Character = {
+    characterId: string;
+    characterClass: string;
+    secondaryCharacterClass: string;
+}
+
+export type CharacterItem = {
+    value: string;
+    label: string;
+}
