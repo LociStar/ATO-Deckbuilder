@@ -7,6 +7,7 @@ import {Card, Character} from "../types/types.tsx";
 import {memo} from 'preact/compat';
 import Typography from "@mui/material/Typography";
 import CustomSearch from "../components/CustomSearch.tsx";
+import {useAuth} from "react-oidc-context";
 
 export default function DeckBuilder() {
     const [title, setTitle] = useState('');
@@ -16,16 +17,20 @@ export default function DeckBuilder() {
     const [searchQuery, setSearchQuery] = useState('');
     const [isSaving, setIsSaving] = useState(false);
     const [chars, setChars] = useState<Character[]>([]);
+    const auth = useAuth();
 
     useEffect(() => {
-        fetch('http://localhost:8080/character')
-            .then(response => response.json())
-            // .then(data => data.map((character: Character) => ({
-            //     value: character.characterId,
-            //     label: character.characterId
-            // })))
-            .then(data => setChars(data));
-    }, []);
+        if (auth.user?.access_token) {
+            fetch('http://localhost:8080/character', {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + auth.user?.access_token,
+                }
+            })
+                .then(response => response.json())
+                .then(data => setChars(data));
+        }
+    }, [auth.user?.access_token]);
 
     const addCardToList = (card: Card) => {
         setCardList(oldList => [...oldList, card]);
@@ -54,6 +59,7 @@ export default function DeckBuilder() {
             const response = await fetch('http://localhost:8080/deck/upload', {
                 method: 'PUT',
                 headers: {
+                    'Authorization': 'Bearer ' + auth.user?.access_token,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(deck)
@@ -115,7 +121,7 @@ export default function DeckBuilder() {
             <Grid container
                   spacing={2}>
                 <Grid xs={3} md={4}>
-                    <Box style={{maxHeight: 'calc(100vh - 500px)', overflow: 'auto'}}>
+                    <Box style={{maxHeight: 'calc(100vh - 100px)', overflow: 'auto'}}>
                         <List>
                             {cardList.map((cardName, index) => (
                                 <MemoizedListItem key={index} cardName={cardName.name}/>
@@ -129,7 +135,7 @@ export default function DeckBuilder() {
                     </Box>
                     <CardsView component={true} searchQuery={searchQuery}
                                charClass={chars.find(char => char.characterId === selectedCharacter)?.characterClass || ''}
-                               secondaryCharClass={chars.find(char => char.characterId === selectedCharacter)?.characterClass || ''}
+                               secondaryCharClass={chars.find(char => char.characterId === selectedCharacter)?.secondaryCharacterClass || ''}
                                onCardClick={addCardToList}/>
                 </Grid>
             </Grid>
