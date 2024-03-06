@@ -19,7 +19,6 @@ import RenderOnAnonymous from "./conditionals/RenderOnAnonymous.tsx";
 import CustomSearch from "./CustomSearch.tsx";
 
 
-
 export default function PrimarySearchAppBar({setSearchQuery}: { setSearchQuery: (query: string) => void }) {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
@@ -67,10 +66,18 @@ export default function PrimarySearchAppBar({setSearchQuery}: { setSearchQuery: 
             <RenderOnAuthenticated>
                 <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
                 <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-                <MenuItem onClick={() => {setAnchorEl(null); handleMobileMenuClose(); return void auth.signoutSilent()}}>Log out</MenuItem>
+                <MenuItem onClick={() => {
+                    setAnchorEl(null);
+                    handleMobileMenuClose();
+                    return auth.signoutSilent()
+                }}>Log out</MenuItem>
             </RenderOnAuthenticated>
             <RenderOnAnonymous>
-                <MenuItem onClick={() => {setAnchorEl(null); handleMobileMenuClose(); return void auth.signinRedirect()}}>Log in</MenuItem>
+                <MenuItem onClick={() => {
+                    setAnchorEl(null);
+                    handleMobileMenuClose();
+                    return auth.signinRedirect()
+                }}>Log in</MenuItem>
             </RenderOnAnonymous>
         </Menu>
     );
