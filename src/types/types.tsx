@@ -3,6 +3,8 @@ export type Card = {
     name: string;
     class: string;
     version: string;
+    rarity: string;
+    originalRarity: string;
 };
 
 export type CharBuild = {
