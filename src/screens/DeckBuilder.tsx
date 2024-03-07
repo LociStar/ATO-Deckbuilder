@@ -17,7 +17,42 @@ export default function DeckBuilder() {
     const [searchQuery, setSearchQuery] = useState('');
     const [isSaving, setIsSaving] = useState(false);
     const [chars, setChars] = useState<Character[]>([]);
+    const [cardCost, setCardCost] = useState(0);
+    const [cardCraftingModifier, setCardCraftingModifier] = useState(1);
+    const [cardUpgradingModifier, setCardUpgradingModifier] = useState(1);
     const auth = useAuth();
+
+    const removeCard = (cardToRemove: Card) => {
+        setCardList(oldList => oldList.filter(card => card !== cardToRemove));
+    };
+
+    useEffect(() => {
+        const costMap: { [key: string]: number } = {
+            'Common': 60,
+            'Uncommon': 180,
+            'Rare': 420,
+            'Epic': 1260,
+            'Mythic': 1940
+        };
+
+        let totalCost = 0;
+
+        cardList.forEach(card => {
+            const baseCost = costMap[card.rarity];
+            if (card.originalRarity == null) { // card cost
+                totalCost += Math.round(baseCost * cardCraftingModifier);
+            } else { // upgrade cost
+                if (card.rarity === card.originalRarity) {
+                    totalCost += Math.round(baseCost * (cardCraftingModifier + cardUpgradingModifier));
+                } else {
+                    const originalCost = costMap[card.originalRarity];
+                    totalCost += Math.round(originalCost * cardCraftingModifier + baseCost * cardUpgradingModifier);
+                }
+            }
+        });
+
+        setCardCost(totalCost);
+    }, [cardList, cardCraftingModifier, cardUpgradingModifier]);
 
     useEffect(() => {
         if (auth.user?.access_token) {
@@ -36,10 +71,11 @@ export default function DeckBuilder() {
         setCardList(oldList => [...oldList, card]);
     };
 
-    const MemoizedListItem = memo(({cardName}: { cardName: string }) => (
+    const MemoizedListItem = memo(({card, removeCard}: { card: Card, removeCard: (card: Card) => void }) => (
         <div>
             <ListItem>
-                <ListItemText primary={cardName}/>
+                <Button size="small" variant="outlined" sx={{marginRight: 2}} onClick={() => removeCard(card)}>X</Button>
+                <ListItemText primary={card.name}/>
             </ListItem>
             <Divider/>
         </div>
@@ -118,13 +154,14 @@ export default function DeckBuilder() {
             </TextField>
             <Divider/>
             <Typography variant="h5">Cards</Typography>
+            <Typography>Cost: {cardCost}</Typography>
             <Grid container
                   spacing={2}>
                 <Grid xs={3} md={4}>
                     <Box style={{maxHeight: 'calc(100vh - 100px)', overflow: 'auto'}}>
                         <List>
-                            {cardList.map((cardName, index) => (
-                                <MemoizedListItem key={index} cardName={cardName.name}/>
+                            {cardList.map((card, index) => (
+                                <MemoizedListItem key={index} card={card} removeCard={removeCard}/>
                             ))}
                         </List>
                     </Box>
