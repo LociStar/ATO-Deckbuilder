@@ -8,6 +8,7 @@ import {memo} from 'preact/compat';
 import Typography from "@mui/material/Typography";
 import CustomSearch from "../components/CustomSearch.tsx";
 import {useAuth} from "react-oidc-context";
+import {calculate_deck_cost} from "../utils/utils.ts";
 
 export default function DeckBuilder() {
     const [title, setTitle] = useState('');
@@ -27,31 +28,7 @@ export default function DeckBuilder() {
     };
 
     useEffect(() => {
-        const costMap: { [key: string]: number } = {
-            'Common': 60,
-            'Uncommon': 180,
-            'Rare': 420,
-            'Epic': 1260,
-            'Mythic': 1940
-        };
-
-        let totalCost = 0;
-
-        cardList.forEach(card => {
-            const baseCost = costMap[card.rarity];
-            if (card.originalRarity == null) { // card cost
-                totalCost += Math.round(baseCost * cardCraftingModifier);
-            } else { // upgrade cost
-                if (card.rarity === card.originalRarity) {
-                    totalCost += Math.round(baseCost * (cardCraftingModifier + cardUpgradingModifier));
-                } else {
-                    const originalCost = costMap[card.originalRarity];
-                    totalCost += Math.round(originalCost * cardCraftingModifier + baseCost * cardUpgradingModifier);
-                }
-            }
-        });
-
-        setCardCost(totalCost);
+        setCardCost(calculate_deck_cost(cardList, cardCraftingModifier, cardUpgradingModifier));
     }, [cardList, cardCraftingModifier, cardUpgradingModifier]);
 
     useEffect(() => {
@@ -74,7 +51,8 @@ export default function DeckBuilder() {
     const MemoizedListItem = memo(({card, removeCard}: { card: Card, removeCard: (card: Card) => void }) => (
         <div>
             <ListItem>
-                <Button size="small" variant="outlined" sx={{marginRight: 2}} onClick={() => removeCard(card)}>X</Button>
+                <Button size="small" variant="outlined" sx={{marginRight: 2}}
+                        onClick={() => removeCard(card)}>X</Button>
                 <ListItemText primary={card.name}/>
             </ListItem>
             <Divider/>
