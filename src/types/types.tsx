@@ -7,6 +7,17 @@ export type Card = {
     originalRarity: string;
 };
 
+export type Deck = {
+    id: string;
+    title: string;
+    description: string;
+    charName: string;
+    username: string;
+    likes: number;
+    characterId: string;
+    cardList: Card[];
+};
+
 export type CharBuild = {
     id: string;
     title: string;
