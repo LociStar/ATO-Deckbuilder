@@ -6,21 +6,18 @@ import {useAuth} from "react-oidc-context";
 import Typography from "@mui/material/Typography";
 import {calculate_deck_cost} from "../utils/utils.ts";
 
-import {BarChart} from '@mui/x-charts/BarChart';
 import MenuItem from "@mui/material/MenuItem";
+import {EnergyCostGraph} from "../components/graphs/EnergyCostGraph.tsx";
+import {RarityGraph} from "../components/graphs/RarityGraph.tsx";
 
 export default function DeckDetailsView() {
     const [deck, setDeck] = useState<Deck>();
     const [deckCost, setDeckCost] = useState(0);
     const [cardCraftingModifier, setCardCraftingModifier] = useState(1);
     const [cardUpgradingModifier, setCardUpgradingModifier] = useState(1);
-    const [energyCostDataset, setEnergyCostDataset] = useState<{ energy: string, amount: number }[]>([{
-        energy: '1',
-        amount: 0
-    }, {energy: '2', amount: 0}, {energy: '3', amount: 0}, {energy: '4', amount: 0}, {energy: '5+', amount: 0}]);
-    const [averageEnergyCost, setAverageEnergyCost] = useState<number>(0);
     const [filter, setFilter] = useState('energy');
     const auth = useAuth();
+
 
     useEffect(() => {
         if (!deck?.cardList) return;
@@ -46,7 +43,6 @@ export default function DeckDetailsView() {
 
     useEffect(() => {
         if (!deck) return;
-        console.log(filter)
         switch (filter) {
             case 'rarity':
                 sortCardsByRarity(deck!);
@@ -69,13 +65,14 @@ export default function DeckDetailsView() {
                 }
             })
             .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                return data;
-            })
+            // .then(data => {
+            //     console.log(data);
+            //     return data;
+            // })
             .then(data => {
                 setDeck(data);
 
+                // Sort the cards by filter
                 switch (filter) {
                     case 'rarity':
                         sortCardsByRarity(data);
@@ -86,29 +83,6 @@ export default function DeckDetailsView() {
                     default:
                         sortCardsByEnergy(data);
                 }
-
-                // Calculate the count of cards with energy cost of 1, 2, 3, 4, 5+
-                let totalEnergyCost = 0;
-                const costs = data.cardList.reduce((acc: number[], card: Card) => {
-                    if (card.energyCost >= 1 && card.energyCost <= 5) {
-                        acc[card.energyCost - 1]++;
-                    } else if (card.energyCost > 5) {
-                        acc[4]++;
-                    }
-                    totalEnergyCost += card.energyCost;
-                    return acc;
-                }, [0, 0, 0, 0, 0]);
-
-                const averageCost = totalEnergyCost / data.cardList.length;
-
-                const newEnergyCostDataset = costs.map((cost: number, index: number) => ({
-                    energy: (index + 1).toString(),
-                    amount: cost,
-                }));
-
-                // Update the energyCostDataset state and the averageEnergyCost state
-                setEnergyCostDataset(newEnergyCostDataset);
-                setAverageEnergyCost(averageCost);
             });
     }, [auth]);
 
@@ -146,26 +120,39 @@ export default function DeckDetailsView() {
                             id="sort-select-small"
                             value={filter}
                             label="Sort by"
-                            onChange={handleFilterChange}
-                        >
+                            onChange={handleFilterChange}>
                             <MenuItem value="energy">Energy Cost</MenuItem>
                             <MenuItem value='rarity'>Rarity</MenuItem>
                         </Select>
                     </FormControl>
-                    <BarChart width={500} height={300}
-                              dataset={energyCostDataset}
-                              series={[
-                                  {
-                                      label: 'Amount',
-                                      dataKey: 'amount',
-                                      color: '#ff9f13',
-                                  },
-                              ]}
-                              xAxis={[{scaleType: 'band', dataKey: 'energy', label: 'Energy'}]}
-                    />
-                    <Typography variant="body2">
-                        Average energy cost: {averageEnergyCost}
-                    </Typography>
+                    <FormControl sx={{m: 1, minWidth: 120}} size="small">
+                        <InputLabel id="crafting-modifier-label">Craft Reduction</InputLabel>
+                        <Select
+                            labelId="crafting-modifier-label"
+                            id="crafting-modifier-small"
+                            value={cardCraftingModifier}
+                            label="Craft Reduction"
+                            onChange={event => setCardCraftingModifier(event.target?.value)}>
+                            <MenuItem value={1}>No Reduction</MenuItem>
+                            <MenuItem value={0.25}>25%</MenuItem>
+                            <MenuItem value={0.5}>50%</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl sx={{m: 1, minWidth: 120}} size="small">
+                        <InputLabel id="upgrading-modifier-label">Upgrade Reduction</InputLabel>
+                        <Select
+                            labelId="upgrading-modifier-label"
+                            id="upgrading-modifier-small"
+                            value={cardUpgradingModifier}
+                            label="Upgrade Reduction"
+                            onChange={event => setCardUpgradingModifier(event.target?.value)}>
+                            <MenuItem value={1}>No Reduction</MenuItem>
+                            <MenuItem value={0.25}>25%</MenuItem>
+                            <MenuItem value={0.5}>50%</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <EnergyCostGraph cardList={deck?.cardList || []}/>
+                    <RarityGraph cardList={deck?.cardList || []}/>
                 </List>
                 <Stack direction="column" marginLeft={10} marginRight={20} marginBottom={10}
                        flexBasis="50%"> {/* Adjust this value to control the width of the card list */}
