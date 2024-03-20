@@ -132,7 +132,7 @@ export default function DeckDetailsView() {
                             id="crafting-modifier-small"
                             value={cardCraftingModifier}
                             label="Craft Reduction"
-                            onChange={event => setCardCraftingModifier(event.target?.value)}>
+                            onChange={event => setCardCraftingModifier(Number((event.target as HTMLSelectElement).value))}>
                             <MenuItem value={1}>No Reduction</MenuItem>
                             <MenuItem value={0.25}>25%</MenuItem>
                             <MenuItem value={0.5}>50%</MenuItem>
@@ -145,7 +145,7 @@ export default function DeckDetailsView() {
                             id="upgrading-modifier-small"
                             value={cardUpgradingModifier}
                             label="Upgrade Reduction"
-                            onChange={event => setCardUpgradingModifier(event.target?.value)}>
+                            onChange={event => setCardUpgradingModifier(Number((event.target as HTMLSelectElement).value))}>
                             <MenuItem value={1}>No Reduction</MenuItem>
                             <MenuItem value={0.25}>25%</MenuItem>
                             <MenuItem value={0.5}>50%</MenuItem>
