@@ -1,9 +1,11 @@
+type Rarity = 'Common' | 'Uncommon' | 'Rare' | 'Epic' | 'Mythic';
+
 export type Card = {
     id: string;
     name: string;
     class: string;
     version: string;
-    rarity: string;
+    rarity: Rarity;
     originalRarity: string;
     energyCost: number;
 };
