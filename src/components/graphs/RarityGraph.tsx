@@ -25,16 +25,16 @@ export const RarityGraph: React.FC<RarityGraphProps> = ({ cardList }) => {
         });
 
     useEffect(() => {
-        const rarities = cardList.reduce((acc: { [key: string]: number }, card: Card) => {
-            acc[card.rarity] = (acc[card.rarity] || 0) + 1;
-            return acc;
-        }, {});
+        const rarities = {
+            'Common': 0,
+            'Uncommon': 0,
+            'Rare': 0,
+            'Epic': 0,
+            'Mythic': 0
+        };
 
-        // set card rarity to 0 if it doesn't exist
-        ['Common', 'Uncommon', 'Rare', 'Epic', 'Mythic'].forEach((rarity) => {
-            if (!rarities[rarity]) {
-                rarities[rarity] = 0;
-            }
+        cardList.forEach((card: Card) => {
+            rarities[card.rarity]++;
         });
 
         setRarityDataset(rarities);
