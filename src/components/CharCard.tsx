@@ -3,19 +3,30 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import {useState} from "preact/hooks";
-import {CharBuild} from "../types/types.tsx";
+import {Deck} from "../types/types.tsx";
 import {Button, Stack} from "@mui/material";
+import { useContext } from "preact/hooks";
+import {AppState} from "../app.tsx";
+import {useNavigate} from "react-router-dom";
 
-export default function CharBuilds({charBuild}: { charBuild: CharBuild }) {
+export default function CharBuilds({deck}: { deck: Deck }) {
     const [likes, setLikes] = useState(0); // Add this line
-    setLikes(charBuild.likes);
+    setLikes(deck.likes);
+    const state = useContext(AppState);
+    const navigate = useNavigate();
 
     const handleLikeClick = () => {
         setLikes(likes + 1);
     };
 
+    function onDeckCardClick() {
+        state.deckId = deck.id;
+        // using react-router-dom navigate to the deck details view
+        return navigate('/deck/' + deck.id);
+    }
+
     return (
-        <Button color="secondary" variant="contained"
+        <Button color="secondary" variant="contained" onClick={onDeckCardClick}
                 sx={{
                     display: 'flex', maxWidth: 1200, maxHeight: 100, width: '100%',
                 }}>
@@ -26,10 +37,10 @@ export default function CharBuilds({charBuild}: { charBuild: CharBuild }) {
             />
             <Stack marginLeft={5} alignItems="flex-start">
                 <Typography variant="h5" fontWeight='bold'>
-                    {charBuild.title}
+                    {deck.title}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    {charBuild.charName} guide by {charBuild.userName}
+                    {deck.charName} guide by {deck.username}
                 </Typography>
             </Stack>
 
