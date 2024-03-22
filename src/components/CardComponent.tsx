@@ -1,6 +1,9 @@
 import {useEffect, useState} from "preact/hooks";
 import {Card} from "../types/types";
 
+// Create a cache object outside of the component
+const imageCache: {[key: string]: string} = {};
+
 export default function CardComponent({card, onCardClick}: {
     card: Card,
     onCardClick: (card: Card) => void
@@ -9,10 +12,17 @@ export default function CardComponent({card, onCardClick}: {
 
     useEffect(() => {
         const fetchImage = async () => {
-            const response = await fetch(`http://localhost:8080/image/${card.id}`);
-            const blob = await response.blob();
-            const objectURL = URL.createObjectURL(blob);
-            setImageSrc(objectURL);
+            // Check if the image is in the cache
+            if (imageCache[card.id]) {
+                setImageSrc(imageCache[card.id]);
+            } else {
+                const response = await fetch(`http://localhost:8080/image/${card.id}`);
+                const blob = await response.blob();
+                const objectURL = URL.createObjectURL(blob);
+                // Store the image URL in the cache
+                imageCache[card.id] = objectURL;
+                setImageSrc(objectURL);
+            }
         };
 
         fetchImage().then(r => r);
