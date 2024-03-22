@@ -20,13 +20,15 @@ export default function CardsView({searchQuery, charClass, secondaryCharClass, c
         setPage(0);
     }, [searchQuery]);
 
-    const fetchCards = async ({page, searchQuery, charClass, secondaryCharClass, token}: { page: any, searchQuery: any, charClass: any, secondaryCharClass: any, token: any }) => {
+    const fetchCards = async ({page, searchQuery, charClass, secondaryCharClass}: {
+        page: any,
+        searchQuery: any,
+        charClass: any,
+        secondaryCharClass: any
+    }) => {
         fetch(`http://localhost:8080/card?page=${page}&size=24&searchQuery=${searchQuery}&charClass=${charClass}&secondaryCharClass=${secondaryCharClass}`,
             {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                }
+                method: 'GET'
             }).then(response => response.json())
             .then(data => setCards(data));
     }
@@ -34,17 +36,22 @@ export default function CardsView({searchQuery, charClass, secondaryCharClass, c
     useEffect(() => {
         if (!auth.user?.access_token) return;
         try {
-            fetchCards({page: page, searchQuery: searchQuery, charClass: charClass, secondaryCharClass: secondaryCharClass, token: auth.user?.access_token}).then(r => r);
+            fetchCards({
+                page: page,
+                searchQuery: searchQuery,
+                charClass: charClass,
+                secondaryCharClass: secondaryCharClass
+            }).then(r => r);
         } catch (error) {
             console.error('Error:', error);
         }
-    }, [page, searchQuery, charClass, secondaryCharClass, auth.user?.access_token]);
+    }, [page, searchQuery, charClass, secondaryCharClass]);
 
     return (
         <Stack direction="column">
             <div style={{display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gridGap: '10px'}}>
                 {cards.map((card) => (
-                    <CardComponent card={card} token={auth.user?.access_token} onCardClick={onCardClick}/>
+                    <CardComponent card={card} onCardClick={onCardClick}/>
                 ))}
             </div>
             {component ? (

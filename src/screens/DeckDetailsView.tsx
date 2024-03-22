@@ -58,13 +58,9 @@ export default function DeckDetailsView() {
     }, [filter]);
 
     useEffect(() => {
-        if (!auth.user?.access_token) return;
         fetch('http://localhost:8080/deck/16'
             , {
                 method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + auth.user?.access_token,
-                }
             })
             .then(response => response.json())
             // .then(data => {
@@ -86,7 +82,7 @@ export default function DeckDetailsView() {
                         sortCardsByEnergy(data);
                 }
             });
-    }, [auth]);
+    }, []);
 
     function onCardClick() {
     }
@@ -105,10 +101,11 @@ export default function DeckDetailsView() {
                 <Typography variant="h5">
                     Made by {deck?.username}
                 </Typography>
-                <Stack direction={{xs: 'column', sm: 'column', md: 'row'}} marginTop={3} display="flex" alignItems="center">
+                <Stack direction={{xs: 'column', sm: 'column', md: 'row'}} marginTop={3} display="flex"
+                       alignItems="center">
                     {deck && <Box flex={1}><CharacterImage characterId={deck?.characterId!}/></Box>}
                     {deck?.description == "" ? <Box/> :
-                        <Stack padding={3} sx={{border: 1, borderRadius: 10, marginX: { xs: 1, sm: 2, md: 2 }}}>
+                        <Stack padding={3} sx={{border: 1, borderRadius: 10, marginX: {xs: 1, sm: 2, md: 2}}}>
                             <Typography variant="h4">
                                 Description:
                             </Typography>

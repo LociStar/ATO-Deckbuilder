@@ -9,18 +9,14 @@ export default function CharacterImage({characterId}: { characterId: string }) {
 
     useEffect(() => {
         const fetchImage = async () => {
-            const response = await fetch(AppConfig.API_URL + `/character/image/${characterId}`, {
-                headers: {
-                    'Authorization': 'Bearer ' + auth.user?.access_token,
-                },
-            });
+            const response = await fetch(AppConfig.API_URL + `/character/image/${characterId}`);
             const blob = await response.blob();
             const objectURL = URL.createObjectURL(new Blob([blob], {type: 'image/webp'}));
             setImageSrc(objectURL);
         };
 
         fetchImage().then(r => r);
-    }, [auth]);
+    }, []);
 
     return (
         <Container>
