@@ -1,4 +1,4 @@
-import {Divider, FormControl, InputLabel, List, Select, SelectChangeEvent, Stack} from "@mui/material";
+import {Box, Divider, FormControl, InputLabel, List, Select, SelectChangeEvent, Stack} from "@mui/material";
 import {useState, useEffect} from "preact/hooks";
 import {Card, Deck} from "../types/types";
 import CardComponent from "../components/CardComponent.tsx";
@@ -105,10 +105,10 @@ export default function DeckDetailsView() {
                 <Typography variant="h5">
                     Made by {deck?.username}
                 </Typography>
-                <Stack direction="row" justifyContent="space-evenly" width="100%" marginTop={6}>
-                    {deck && <CharacterImage characterId={deck?.characterId!}/>}
-                    {deck?.description == "" ? <div/> :
-                        <Stack display="flex" justifyContent="left" padding={3} sx={{border: 1, borderRadius: 10}}>
+                <Stack direction={{xs: 'column', sm: 'column', md: 'row'}} marginTop={3} display="flex" alignItems="center">
+                    {deck && <Box flex={1}><CharacterImage characterId={deck?.characterId!}/></Box>}
+                    {deck?.description == "" ? <Box/> :
+                        <Stack padding={3} sx={{border: 1, borderRadius: 10, marginX: { xs: 1, sm: 2, md: 2 }}}>
                             <Typography variant="h4">
                                 Description:
                             </Typography>
@@ -117,9 +117,10 @@ export default function DeckDetailsView() {
                 </Stack>
             </Stack>
             <Divider variant="middle"/>
-            <Stack direction="row" marginTop={3} marginLeft={10}>
-                <List>
-                    <Stack direction="row">
+            <Stack direction={{xs: 'column', sm: 'column', md: 'row'}} marginTop={3} marginLeft={10} marginRight={10}
+                   display="flex">
+                <List style={{flex: 1}}>
+                    <Stack direction={{md: "row"}}>
                         <FormControl sx={{m: 1, minWidth: 120}} size="small">
                             <InputLabel id="sort-select-label">Sort by</InputLabel>
                             <Select
@@ -159,16 +160,20 @@ export default function DeckDetailsView() {
                             </Select>
                         </FormControl>
                     </Stack>
-                    <Typography variant="h5" marginTop={5} marginBottom={5}>
-                        Blue Shard cost: {deckCost}
+                    <Typography variant="h5" marginTop={5} marginBottom={1}>
+                        Blue Shards: {deckCost}
                     </Typography>
                     <EnergyCostGraph cardList={deck?.cardList || []}/>
                     <RarityGraph cardList={deck?.cardList || []}/>
                 </List>
-                <Stack direction="column" marginLeft={10} marginRight={10} marginBottom={10}
-                       flexBasis="100%">
+                <Stack direction="column" marginBottom={10}
+                       width="100%" style={{flex: 6}}>
                     {/* Adjust this value to control the width of the card list */}
-                    <div style={{display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gridGap: '10px'}}>
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                        gridGap: '10px'
+                    }}>
                         {deck && deck.cardList.map((card) => (
                             <CardComponent card={card} token={auth.user?.access_token} onCardClick={onCardClick}/>
                         ))}
@@ -176,6 +181,5 @@ export default function DeckDetailsView() {
                 </Stack>
             </Stack>
         </Stack>
-
     );
 }
