@@ -2,7 +2,6 @@ import {Box, Divider, FormControl, InputLabel, List, Select, SelectChangeEvent, 
 import {useState, useEffect} from "preact/hooks";
 import {Card, Deck} from "../types/types";
 import CardComponent from "../components/CardComponent.tsx";
-import {useAuth} from "react-oidc-context";
 import Typography from "@mui/material/Typography";
 import {calculate_deck_cost} from "../utils/utils.ts";
 import {MuiMarkdown} from 'mui-markdown';
@@ -12,13 +11,12 @@ import {EnergyCostGraph} from "../components/graphs/EnergyCostGraph.tsx";
 import {RarityGraph} from "../components/graphs/RarityGraph.tsx";
 import CharacterImage from "../components/CharacterImage.tsx";
 
-export default function DeckDetailsView() {
+export default function DeckDetailsView({deckId}: {deckId: number}) {
     const [deck, setDeck] = useState<Deck>();
     const [deckCost, setDeckCost] = useState(0);
     const [cardCraftingModifier, setCardCraftingModifier] = useState(1);
     const [cardUpgradingModifier, setCardUpgradingModifier] = useState(1);
     const [filter, setFilter] = useState('energy');
-    const auth = useAuth();
 
 
     useEffect(() => {
@@ -58,7 +56,7 @@ export default function DeckDetailsView() {
     }, [filter]);
 
     useEffect(() => {
-        fetch('http://localhost:8080/deck/16'
+        fetch('http://localhost:8080/deck/' + deckId
             , {
                 method: 'GET',
             })
@@ -172,7 +170,7 @@ export default function DeckDetailsView() {
                         gridGap: '10px'
                     }}>
                         {deck && deck.cardList.map((card) => (
-                            <CardComponent card={card} token={auth.user?.access_token} onCardClick={onCardClick}/>
+                            <CardComponent card={card} onCardClick={onCardClick}/>
                         ))}
                     </div>
                 </Stack>
