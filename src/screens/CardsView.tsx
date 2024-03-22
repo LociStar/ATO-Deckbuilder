@@ -1,11 +1,11 @@
-import {useState, useEffect} from 'preact/hooks';
+import {useState, useEffect, useContext} from 'preact/hooks';
 import {Button, Stack} from "@mui/material";
 import {Card} from "../types/types.tsx";
 import {useAuth} from "react-oidc-context";
 import CardComponent from "../components/CardComponent.tsx";
+import {AppState} from "../app.tsx";
 
-export default function CardsView({searchQuery, charClass, secondaryCharClass, component, onCardClick}: {
-    searchQuery: string,
+export default function CardsView({charClass, secondaryCharClass, component, onCardClick}: {
     charClass: string,
     secondaryCharClass: string,
     component: boolean,
@@ -14,38 +14,49 @@ export default function CardsView({searchQuery, charClass, secondaryCharClass, c
     const [cards, setCards] = useState<Card[]>([]);
     const [page, setPage] = useState(0);
     const auth = useAuth();
+    const {searchText} = useContext(AppState);
 
     // Reset page to 0 when searchQuery changes
     useEffect(() => {
         setPage(0);
-    }, [searchQuery]);
+    }, [searchText.value]);
 
-    const fetchCards = async ({page, searchQuery, charClass, secondaryCharClass}: {
+    const fetchCards = async ({page, charClass, secondaryCharClass}: {
         page: any,
-        searchQuery: any,
         charClass: any,
         secondaryCharClass: any
     }) => {
-        fetch(`http://localhost:8080/card?page=${page}&size=24&searchQuery=${searchQuery}&charClass=${charClass}&secondaryCharClass=${secondaryCharClass}`,
+        fetch(`http://localhost:8080/card?page=${page}&size=24&searchQuery=${searchText.value}&charClass=${charClass}&secondaryCharClass=${secondaryCharClass}`,
             {
                 method: 'GET'
             }).then(response => response.json())
             .then(data => setCards(data));
     }
-
+    // effect(() => {
+    //     if (!auth.user?.access_token) return;
+    //     try {
+    //         fetchCards({
+    //             page: page,
+    //             searchQuery: searchQuery,
+    //             charClass: charClass,
+    //             secondaryCharClass: secondaryCharClass
+    //         }).then(r => r);
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //     }
+    // });
     useEffect(() => {
         if (!auth.user?.access_token) return;
         try {
             fetchCards({
                 page: page,
-                searchQuery: searchQuery,
                 charClass: charClass,
                 secondaryCharClass: secondaryCharClass
             }).then(r => r);
         } catch (error) {
             console.error('Error:', error);
         }
-    }, [page, searchQuery, charClass, secondaryCharClass]);
+    }, [page, charClass, secondaryCharClass, searchText.value]);
 
     return (
         <Stack direction="column">

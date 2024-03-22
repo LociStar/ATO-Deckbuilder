@@ -19,7 +19,7 @@ import RenderOnAnonymous from "./conditionals/RenderOnAnonymous.tsx";
 import CustomSearch from "./CustomSearch.tsx";
 
 
-export default function PrimarySearchAppBar({setSearchQuery}: { setSearchQuery: (query: string) => void }) {
+export default function PrimarySearchAppBar() {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -153,7 +153,7 @@ export default function PrimarySearchAppBar({setSearchQuery}: { setSearchQuery: 
                 >
                     ATO-Deckbuilder
                 </Typography>
-                <CustomSearch setSearchQuery={setSearchQuery}/>
+                <CustomSearch/>
                 {/*<Search>*/}
                 {/*    <SearchIconWrapper>*/}
                 {/*        <SearchIcon/>*/}
