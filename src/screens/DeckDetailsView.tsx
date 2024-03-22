@@ -137,8 +137,8 @@ export default function DeckDetailsView({deckId}: {deckId: number}) {
                                 label="Craft Reduction"
                                 onChange={event => setCardCraftingModifier(Number((event.target as HTMLSelectElement).value))}>
                                 <MenuItem value={1}>No Reduction</MenuItem>
-                                <MenuItem value={0.25}>25%</MenuItem>
-                                <MenuItem value={0.5}>50%</MenuItem>
+                                <MenuItem value={0.15}>15%</MenuItem>
+                                <MenuItem value={0.3}>30%</MenuItem>
                             </Select>
                         </FormControl>
                         <FormControl sx={{m: 1, minWidth: 120}} size="small">
@@ -150,8 +150,8 @@ export default function DeckDetailsView({deckId}: {deckId: number}) {
                                 label="Upgrade Reduction"
                                 onChange={event => setCardUpgradingModifier(Number((event.target as HTMLSelectElement).value))}>
                                 <MenuItem value={1}>No Reduction</MenuItem>
-                                <MenuItem value={0.25}>25%</MenuItem>
-                                <MenuItem value={0.5}>50%</MenuItem>
+                                <MenuItem value={0.15}>15%</MenuItem>
+                                <MenuItem value={0.3}>30%</MenuItem>
                             </Select>
                         </FormControl>
                     </Stack>
