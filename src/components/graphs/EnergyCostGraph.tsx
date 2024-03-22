@@ -38,20 +38,20 @@ export const EnergyCostGraph: React.FC<EnergyCostGraphProps> = ({ cardList }) =>
     }, [cardList]);
     return (
         <>
+            <Typography variant="h5">
+                Average energy cost: {averageEnergyCost}
+            </Typography>
             <BarChart width={500} height={300}
                       dataset={energyCostDataset}
                       series={[
                           {
-                              label: 'Amount',
+                              label: 'Count',
                               dataKey: 'amount',
-                              color: '#ff9f13',
+                              color: '#cc8b00',
                           },
                       ]}
                       xAxis={[{scaleType: 'band', dataKey: 'energy', label: 'Energy'}]}
             />
-            <Typography variant="body2">
-                Average energy cost: {averageEnergyCost}
-            </Typography>
         </>
     );
 };
