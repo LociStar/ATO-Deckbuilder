@@ -1,14 +1,16 @@
-import {FormControl, InputLabel, List, Select, SelectChangeEvent, Stack} from "@mui/material";
+import {Divider, FormControl, InputLabel, List, Select, SelectChangeEvent, Stack} from "@mui/material";
 import {useState, useEffect} from "preact/hooks";
 import {Card, Deck} from "../types/types";
 import CardComponent from "../components/CardComponent.tsx";
 import {useAuth} from "react-oidc-context";
 import Typography from "@mui/material/Typography";
 import {calculate_deck_cost} from "../utils/utils.ts";
+import {MuiMarkdown} from 'mui-markdown';
 
 import MenuItem from "@mui/material/MenuItem";
 import {EnergyCostGraph} from "../components/graphs/EnergyCostGraph.tsx";
 import {RarityGraph} from "../components/graphs/RarityGraph.tsx";
+import CharacterImage from "../components/CharacterImage.tsx";
 
 export default function DeckDetailsView() {
     const [deck, setDeck] = useState<Deck>();
@@ -96,80 +98,82 @@ export default function DeckDetailsView() {
 
     return (
         <Stack>
-            <Stack display="flex" justifyContent="center" alignItems="center">
+            <Stack display="flex" justifyContent="center" alignItems="center" marginBottom={3}>
                 <Typography variant="h2">
                     {deck?.title}
                 </Typography>
-                <Typography variant="h4">
+                <Typography variant="h5">
                     Made by {deck?.username}
                 </Typography>
-                <Typography variant="body2">
-                    Deck cost: {deckCost}
-                </Typography>
-                <Typography variant="h4">
-                    Cards
-                </Typography>
+                <Stack direction="row" justifyContent="space-evenly" width="100%" marginTop={6}>
+                    {deck && <CharacterImage characterId={deck?.characterId!}/>}
+                    {deck?.description == "" ? <div/> :
+                        <Stack display="flex" justifyContent="left" padding={3} sx={{border: 1, borderRadius: 10}}>
+                            <Typography variant="h4">
+                                Description:
+                            </Typography>
+                            <MuiMarkdown>{deck?.description}</MuiMarkdown>
+                        </Stack>}
+                </Stack>
             </Stack>
-
-            <Stack direction="row" marginRight={10} marginLeft={10}>
+            <Divider variant="middle"/>
+            <Stack direction="row" marginTop={3} marginLeft={10}>
                 <List>
-                    <FormControl sx={{m: 1, minWidth: 120}} size="small">
-                        <InputLabel id="sort-select-label">Sort by</InputLabel>
-                        <Select
-                            labelId="sort-select-label"
-                            id="sort-select-small"
-                            value={filter}
-                            label="Sort by"
-                            onChange={handleFilterChange}>
-                            <MenuItem value="energy">Energy Cost</MenuItem>
-                            <MenuItem value='rarity'>Rarity</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <FormControl sx={{m: 1, minWidth: 120}} size="small">
-                        <InputLabel id="crafting-modifier-label">Craft Reduction</InputLabel>
-                        <Select
-                            labelId="crafting-modifier-label"
-                            id="crafting-modifier-small"
-                            value={cardCraftingModifier}
-                            label="Craft Reduction"
-                            onChange={event => setCardCraftingModifier(Number((event.target as HTMLSelectElement).value))}>
-                            <MenuItem value={1}>No Reduction</MenuItem>
-                            <MenuItem value={0.25}>25%</MenuItem>
-                            <MenuItem value={0.5}>50%</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <FormControl sx={{m: 1, minWidth: 120}} size="small">
-                        <InputLabel id="upgrading-modifier-label">Upgrade Reduction</InputLabel>
-                        <Select
-                            labelId="upgrading-modifier-label"
-                            id="upgrading-modifier-small"
-                            value={cardUpgradingModifier}
-                            label="Upgrade Reduction"
-                            onChange={event => setCardUpgradingModifier(Number((event.target as HTMLSelectElement).value))}>
-                            <MenuItem value={1}>No Reduction</MenuItem>
-                            <MenuItem value={0.25}>25%</MenuItem>
-                            <MenuItem value={0.5}>50%</MenuItem>
-                        </Select>
-                    </FormControl>
+                    <Stack direction="row">
+                        <FormControl sx={{m: 1, minWidth: 120}} size="small">
+                            <InputLabel id="sort-select-label">Sort by</InputLabel>
+                            <Select
+                                labelId="sort-select-label"
+                                id="sort-select-small"
+                                value={filter}
+                                label="Sort by"
+                                onChange={handleFilterChange}>
+                                <MenuItem value="energy">Energy Cost</MenuItem>
+                                <MenuItem value='rarity'>Rarity</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControl sx={{m: 1, minWidth: 120}} size="small">
+                            <InputLabel id="crafting-modifier-label">Craft Reduction</InputLabel>
+                            <Select
+                                labelId="crafting-modifier-label"
+                                id="crafting-modifier-small"
+                                value={cardCraftingModifier}
+                                label="Craft Reduction"
+                                onChange={event => setCardCraftingModifier(Number((event.target as HTMLSelectElement).value))}>
+                                <MenuItem value={1}>No Reduction</MenuItem>
+                                <MenuItem value={0.25}>25%</MenuItem>
+                                <MenuItem value={0.5}>50%</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControl sx={{m: 1, minWidth: 120}} size="small">
+                            <InputLabel id="upgrading-modifier-label">Upgrade Reduction</InputLabel>
+                            <Select
+                                labelId="upgrading-modifier-label"
+                                id="upgrading-modifier-small"
+                                value={cardUpgradingModifier}
+                                label="Upgrade Reduction"
+                                onChange={event => setCardUpgradingModifier(Number((event.target as HTMLSelectElement).value))}>
+                                <MenuItem value={1}>No Reduction</MenuItem>
+                                <MenuItem value={0.25}>25%</MenuItem>
+                                <MenuItem value={0.5}>50%</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Stack>
+                    <Typography variant="h5" marginTop={5} marginBottom={5}>
+                        Blue Shard cost: {deckCost}
+                    </Typography>
                     <EnergyCostGraph cardList={deck?.cardList || []}/>
                     <RarityGraph cardList={deck?.cardList || []}/>
                 </List>
-                <Stack direction="column" marginLeft={10} marginRight={20} marginBottom={10}
-                       flexBasis="50%"> {/* Adjust this value to control the width of the card list */}
+                <Stack direction="column" marginLeft={10} marginRight={10} marginBottom={10}
+                       flexBasis="100%">
+                    {/* Adjust this value to control the width of the card list */}
                     <div style={{display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gridGap: '10px'}}>
                         {deck && deck.cardList.map((card) => (
                             <CardComponent card={card} token={auth.user?.access_token} onCardClick={onCardClick}/>
                         ))}
                     </div>
                 </Stack>
-            </Stack>
-            <Stack display="flex" justifyContent="center" alignItems="center">
-                <Typography variant="h4">
-                    Description:
-                </Typography>
-                <Typography variant="body1">
-                    {deck?.description}
-                </Typography>
             </Stack>
         </Stack>
 
