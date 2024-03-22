@@ -1,4 +1,4 @@
-import { BarChart } from '@mui/x-charts/BarChart';
+import {BarChart} from '@mui/x-charts/BarChart';
 import Typography from "@mui/material/Typography";
 import {useEffect, useState} from "preact/hooks";
 import {Card} from "../../types/types.tsx";
@@ -7,7 +7,7 @@ type EnergyCostGraphProps = {
     cardList: Card[];
 };
 
-export const EnergyCostGraph: React.FC<EnergyCostGraphProps> = ({ cardList }) => {
+export const EnergyCostGraph: React.FC<EnergyCostGraphProps> = ({cardList}) => {
     const [energyCostDataset, setEnergyCostDataset] = useState<{ energy: string, amount: number }[]>([{
         energy: '1',
         amount: 0
@@ -41,7 +41,7 @@ export const EnergyCostGraph: React.FC<EnergyCostGraphProps> = ({ cardList }) =>
             <Typography variant="h5">
                 Average energy cost: {averageEnergyCost}
             </Typography>
-            <BarChart width={500} height={300}
+            <BarChart height={300}
                       dataset={energyCostDataset}
                       series={[
                           {

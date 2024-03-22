@@ -1,4 +1,4 @@
-import { BarChart } from '@mui/x-charts/BarChart';
+import {BarChart} from '@mui/x-charts/BarChart';
 import {Card} from "../../types/types.tsx";
 import {useEffect, useState} from "preact/hooks";
 
@@ -14,9 +14,9 @@ const rarityColors = {
     'Mythic': '#ffb72b'
 };
 
-export const RarityGraph: React.FC<RarityGraphProps> = ({ cardList }) => {
+export const RarityGraph: React.FC<RarityGraphProps> = ({cardList}) => {
     const [rarityDataset, setRarityDataset] =
-        useState<{'Common': number, 'Uncommon': number, 'Rare': number, 'Epic': number, 'Mythic': number}>({
+        useState<{ 'Common': number, 'Uncommon': number, 'Rare': number, 'Epic': number, 'Mythic': number }>({
             'Common': 0,
             'Uncommon': 0,
             'Rare': 0,
@@ -40,12 +40,12 @@ export const RarityGraph: React.FC<RarityGraphProps> = ({ cardList }) => {
         setRarityDataset(rarities);
     }, [cardList]);
     return (
-        <BarChart width={500} height={300}
+        <BarChart height={300}
                   slotProps={{
                       legend: {
                           direction: 'row',
                           position: {vertical: 'bottom', horizontal: 'middle'},
-                          padding: 0,
+                          itemMarkHeight: 5,
                       },
                   }}
                   series={[
@@ -76,7 +76,7 @@ export const RarityGraph: React.FC<RarityGraphProps> = ({ cardList }) => {
                       },
                   ]}
                   xAxis={[{scaleType: 'band', data: ['Rarity']}]}
-                  yAxis={[{scaleType: 'linear', label: 'Amount'}]}
+                  yAxis={[{scaleType: 'linear', label: 'Amount', tickMinStep: 1, tickMaxStep: 2}]}
         />
     );
 };
