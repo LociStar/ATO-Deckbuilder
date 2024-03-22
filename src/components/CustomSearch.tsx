@@ -1,6 +1,8 @@
 import SearchIcon from "@mui/icons-material/Search";
 import {alpha, styled} from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
+import {AppState} from "../app.tsx";
+import {useContext} from "preact/hooks";
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -42,18 +44,24 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
         },
     },
 }));
-export default function CustomSearch({setSearchQuery}: { setSearchQuery: (query: string) => void }) {
-  return (
-      <Search>
-          <SearchIconWrapper>
-              <SearchIcon/>
-          </SearchIconWrapper>
-          <StyledInputBase
-              placeholder="Search…"
-              inputProps={{'aria-label': 'search'}}
-              onChange={(event: Event) => setSearchQuery((event.target as HTMLInputElement).value)} // Update the search query state when the user types in the search bar
+export default function CustomSearch() {
+    const state = useContext(AppState);
 
-          />
-      </Search>
-  );
+    const onInput = (e: { currentTarget: { value: string; }; }) => {
+        state.searchText.value = e.currentTarget.value
+    }
+
+    return (
+        <Search>
+            <SearchIconWrapper>
+                <SearchIcon/>
+            </SearchIconWrapper>
+            <StyledInputBase
+                placeholder="Search…"
+                inputProps={{'aria-label': 'search'}}
+                onChange={onInput}
+                value={state.searchText.value}
+            />
+        </Search>
+    );
 }
