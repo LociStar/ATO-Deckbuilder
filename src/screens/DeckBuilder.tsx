@@ -23,7 +23,13 @@ export default function DeckBuilder() {
     const auth = useAuth();
 
     const removeCard = (cardToRemove: Card) => {
-        setCardList(oldList => oldList.filter(card => card !== cardToRemove));
+        setCardList(oldList => {
+            const index = oldList.findIndex(card => card === cardToRemove);
+            if (index !== -1) {
+                return [...oldList.slice(0, index), ...oldList.slice(index + 1)];
+            }
+            return oldList;
+        });
     };
 
     useEffect(() => {
@@ -44,7 +50,7 @@ export default function DeckBuilder() {
         setCardList(oldList => [...oldList, card]);
     };
 
-    const MemoizedListItem = memo(({card, removeCard}: { card: Card, removeCard: (card: Card) => void }) => (
+    const CustomListItem = ({card, removeCard}: { card: Card, removeCard: (card: Card) => void }) => (
         <div>
             <ListItem>
                 <Button size="small" variant="outlined" sx={{marginRight: 2}}
@@ -53,7 +59,7 @@ export default function DeckBuilder() {
             </ListItem>
             <Divider/>
         </div>
-    ));
+    );
 
     async function uploadDeck(title: string, description: string, cardList: Card[]) {
         setIsSaving(true);
@@ -135,7 +141,7 @@ export default function DeckBuilder() {
                     <Box style={{maxHeight: 'calc(100vh - 100px)', overflow: 'auto'}}>
                         <List>
                             {cardList.map((card, index) => (
-                                <MemoizedListItem key={index} card={card} removeCard={removeCard}/>
+                                <CustomListItem key={index} card={card} removeCard={removeCard}/>
                             ))}
                         </List>
                     </Box>
