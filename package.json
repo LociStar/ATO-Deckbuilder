@@ -12,6 +12,8 @@
     "@mui/icons-material": "^5.15.10",
     "@mui/material": "^5.15.10",
     "@mui/styled-engine-sc": "^6.0.0-alpha.16",
+    "@mui/x-charts": "^6.19.5",
+    "mui-markdown": "^1.1.13",
     "oidc-client-ts": "^3.0.1",
     "preact": "^10.19.3",
     "react-oidc-context": "^3.0.0",
