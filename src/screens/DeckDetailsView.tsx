@@ -11,13 +11,12 @@ import {EnergyCostGraph} from "../components/graphs/EnergyCostGraph.tsx";
 import {RarityGraph} from "../components/graphs/RarityGraph.tsx";
 import CharacterImage from "../components/CharacterImage.tsx";
 
-export default function DeckDetailsView({deckId}: {deckId: number}) {
+export default function DeckDetailsView() {
     const [deck, setDeck] = useState<Deck>();
     const [deckCost, setDeckCost] = useState(0);
     const [cardCraftingModifier, setCardCraftingModifier] = useState(1);
     const [cardUpgradingModifier, setCardUpgradingModifier] = useState(1);
     const [filter, setFilter] = useState('energy');
-
 
     useEffect(() => {
         if (!deck?.cardList) return;
@@ -56,6 +55,9 @@ export default function DeckDetailsView({deckId}: {deckId: number}) {
     }, [filter]);
 
     useEffect(() => {
+        // get id from url
+        const url = window.location.href;
+        const deckId = Number(url.split('/').pop());
         fetch('http://localhost:8080/deck/' + deckId
             , {
                 method: 'GET',
