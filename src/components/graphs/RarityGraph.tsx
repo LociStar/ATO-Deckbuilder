@@ -7,11 +7,11 @@ type RarityGraphProps = {
 };
 
 const rarityColors = {
-    'Common': '#6d6d6d',
-    'Uncommon': '#1f77b4',
-    'Rare': '#2ca02c',
-    'Epic': '#d62728',
-    'Mythic': '#9467bd'
+    'Common': '#cccccc',
+    'Uncommon': '#45c24a',
+    'Rare': '#1471e8',
+    'Epic': '#b434ac',
+    'Mythic': '#ffb72b'
 };
 
 export const RarityGraph: React.FC<RarityGraphProps> = ({ cardList }) => {
