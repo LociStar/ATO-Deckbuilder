@@ -1,6 +1,7 @@
 import {useEffect, useState} from "preact/hooks";
 import {useAuth} from "react-oidc-context";
 import {AppConfig} from "../config.tsx";
+import {Box, Container} from "@mui/material";
 
 export default function CharacterImage({characterId}: { characterId: string }) {
     const [imageSrc, setImageSrc] = useState<string>('');
@@ -22,9 +23,11 @@ export default function CharacterImage({characterId}: { characterId: string }) {
     }, [auth]);
 
     return (
-        <img
-            src={imageSrc}
-            alt={`Character ${characterId}`}
-        />
+        <Container>
+            <img
+                src={imageSrc}
+                alt={`Character ${characterId}`}
+            />
+        </Container>
     );
 }
