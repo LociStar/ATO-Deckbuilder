@@ -11,7 +11,7 @@ export type Card = {
 };
 
 export type Deck = {
-    id: string;
+    id: number;
     title: string;
     description: string;
     charName: string;
