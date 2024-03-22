@@ -2,14 +2,12 @@ import './app.css'
 
 import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import AppBar from "./components/AppBar.tsx";
-import CardsView from "./screens/CardsView.tsx";
-import {useState} from "preact/hooks";
-import DeckBuilds from "./screens/DeckBuilds.tsx";
 import {oidcConfig} from "./config.tsx";
 import {AuthProvider} from "react-oidc-context";
-import DeckBuilder from "./screens/DeckBuilder.tsx";
 import ViewController from "./screens/ViewController.tsx";
 import CantoraOne from "./assets/fonts/font.ttf";
+import createAppState from "./utils/AppState.tsx";
+import {createContext} from "preact";
 
 declare module '@mui/material/styles' {
     interface Theme {
@@ -74,20 +72,20 @@ const theme = createTheme({
     },
 });
 
-export function App() {
-    const [searchQuery, setSearchQuery] = useState(''); // Add a state variable for the search query
+export const AppState = createContext(createAppState());
 
+export function App() {
     return (
         <div className="App">
+            <AppState.Provider value={createAppState()}>
             <AuthProvider {...oidcConfig}>
             <ThemeProvider theme={theme}>
                 <CssBaseline/>
-                <AppBar setSearchQuery={setSearchQuery}/>
-                {/*<CardsView searchQuery={searchQuery}/>*/}
-                {/*<DeckBuilds/>*/}
+                <AppBar/>
                 <ViewController/>
             </ThemeProvider>
             </AuthProvider>
+            </AppState.Provider>
         </div>
     );
 }
