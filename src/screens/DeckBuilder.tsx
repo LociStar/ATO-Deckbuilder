@@ -35,9 +35,6 @@ export default function DeckBuilder() {
         if (auth.user?.access_token) {
             fetch('http://localhost:8080/character', {
                 method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + auth.user?.access_token,
-                }
             })
                 .then(response => response.json())
                 .then(data => setChars(data));
@@ -146,9 +143,9 @@ export default function DeckBuilder() {
                 </Grid>
                 <Grid xs={9} md={8}>
                     <Box marginBottom={2}>
-                        <CustomSearch setSearchQuery={setSearchQuery}/>
+                        <CustomSearch/>
                     </Box>
-                    <CardsView component={true} searchQuery={searchQuery}
+                    <CardsView component={true}
                                charClass={chars.find(char => char.characterId === selectedCharacter)?.characterClass || ''}
                                secondaryCharClass={chars.find(char => char.characterId === selectedCharacter)?.secondaryCharacterClass || ''}
                                onCardClick={addCardToList}/>
