@@ -15,7 +15,6 @@ export default function DeckBuilder() {
     const [description, setDescription] = useState('');
     const [selectedCharacter, setSelectedCharacter] = useState<string>('');
     const [cardList, setCardList] = useState<Card[]>([]);
-    const [searchQuery, setSearchQuery] = useState('');
     const [isSaving, setIsSaving] = useState(false);
     const [chars, setChars] = useState<Character[]>([]);
     const [cardCost, setCardCost] = useState(0);
