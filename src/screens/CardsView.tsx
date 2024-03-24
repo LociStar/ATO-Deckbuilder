@@ -1,9 +1,9 @@
 import {useState, useEffect, useContext} from 'preact/hooks';
 import {Button, Stack} from "@mui/material";
 import {Card} from "../types/types.tsx";
-import {useAuth} from "react-oidc-context";
 import CardComponent from "../components/CardComponent.tsx";
 import {AppState} from "../app.tsx";
+import {AppConfig} from "../config.tsx";
 
 export default function CardsView({charClass, secondaryCharClass, component, onCardClick}: {
     charClass: string,
@@ -13,7 +13,6 @@ export default function CardsView({charClass, secondaryCharClass, component, onC
 }) {
     const [cards, setCards] = useState<Card[]>([]);
     const [page, setPage] = useState(0);
-    const auth = useAuth();
     const {searchText} = useContext(AppState);
 
     // Reset page to 0 when searchQuery changes
@@ -26,7 +25,7 @@ export default function CardsView({charClass, secondaryCharClass, component, onC
         charClass: any,
         secondaryCharClass: any
     }) => {
-        fetch(`http://localhost:8080/card?page=${page}&size=24&searchQuery=${searchText.value}&charClass=${charClass}&secondaryCharClass=${secondaryCharClass}`,
+        fetch(AppConfig.API_URL + `/card?page=${page}&size=24&searchQuery=${searchText.value}&charClass=${charClass}&secondaryCharClass=${secondaryCharClass}`,
             {
                 method: 'GET'
             }).then(response => response.json())
@@ -46,7 +45,6 @@ export default function CardsView({charClass, secondaryCharClass, component, onC
     //     }
     // });
     useEffect(() => {
-        if (!auth.user?.access_token) return;
         try {
             fetchCards({
                 page: page,
