@@ -1,6 +1,6 @@
 import './app.css'
 
-import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
+import {createTheme, CssBaseline, responsiveFontSizes, ThemeProvider} from "@mui/material";
 import AppBar from "./components/AppBar.tsx";
 import {oidcConfig} from "./config.tsx";
 import {AuthProvider} from "react-oidc-context";
@@ -109,7 +109,7 @@ export function App() {
         <div className="App">
             <AppState.Provider value={createAppState()}>
                 <AuthProvider {...oidcConfig}>
-                    <ThemeProvider theme={theme}>
+                    <ThemeProvider theme={responsiveFontSizes(theme)}>
                         <CssBaseline/>
                         <AppBar/>
                         <ViewController/>
