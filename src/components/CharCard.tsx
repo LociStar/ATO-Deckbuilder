@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import {useState} from "preact/hooks";
 import {Deck} from "../types/types.tsx";
-import {Box, Button, Stack} from "@mui/material";
+import {Box, Button, Hidden, Stack} from "@mui/material";
 import {useContext} from "preact/hooks";
 import {AppState} from "../app.tsx";
 import {useNavigate} from "react-router-dom";
@@ -27,7 +27,7 @@ export default function CharBuilds({deck}: { deck: Deck }) {
                 sx={{
                     display: 'flex',
                     maxWidth: 1200,
-                    maxHeight: 100,
+                    maxHeight: 120,
                     width: '100%',
                     backdropFilter: 'blur(50px)',
                     backgroundColor: alpha('#000000', 0.5)
@@ -39,13 +39,15 @@ export default function CharBuilds({deck}: { deck: Deck }) {
                     style={{objectFit: 'contain', width: 50, margin: '10px'}}
                 />
             </Box>
-            <Stack marginLeft={5} alignItems="flex-start">
+            <Stack marginLeft={4} alignItems="flex-start">
                 <Typography variant="h5" fontWeight='bold' color='white'>
                     {deck.title}
                 </Typography>
-                <Typography variant="body2" color='white'>
-                    {deck.characterId} guide created by {deck.username}
-                </Typography>
+                <Hidden smDown>
+                    <Typography variant="body2" color='white'>
+                        created by {deck.username}
+                    </Typography>
+                </Hidden>
             </Stack>
 
             <CardActions disableSpacing sx={{marginLeft: 'auto'}}>
