@@ -1,11 +1,10 @@
 import {useEffect, useState} from "preact/hooks";
-import {useAuth} from "react-oidc-context";
 import {AppConfig} from "../config.tsx";
-import {Box, Container} from "@mui/material";
+import {Container} from "@mui/material";
+import {alpha} from "@mui/material/styles";
 
 export default function CharacterImage({characterId}: { characterId: string }) {
     const [imageSrc, setImageSrc] = useState<string>('');
-    const auth = useAuth();
 
     useEffect(() => {
         const fetchImage = async () => {
@@ -23,6 +22,11 @@ export default function CharacterImage({characterId}: { characterId: string }) {
             <img
                 src={imageSrc}
                 alt={`Character ${characterId}`}
+                style={{
+                    borderRadius: 5,
+                    backdropFilter: 'blur(50px)',
+                    backgroundColor: alpha('#000000', 0.5)
+                }}
             />
         </Container>
     );
