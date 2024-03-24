@@ -4,15 +4,22 @@ import {useState, useEffect} from "preact/hooks";
 import {Deck} from "../types/types";
 import AddIcon from '@mui/icons-material/Add';
 import Box from "@mui/material/Box";
+import {AppConfig} from "../config.tsx";
+import {useNavigate} from "react-router-dom";
 
 export default function DecksView() {
     const [decks, setDecks] = useState<Deck[]>([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetch('http://localhost:8080/deck')
+        fetch(AppConfig.API_URL + '/deck')
             .then(response => response.json())
             .then(data => setDecks(data));
     }, []);
+
+    function onCardActionClick() {
+        return navigate('/deckbuilder/');
+    }
 
     return (
         <Box sx={{ '& > :not(style)': { m: 1 } }}>
@@ -21,7 +28,7 @@ export default function DecksView() {
                     <CharCard key={deck.id} deck={deck}/>
                 ))}
             </Stack>
-            <Fab color="secondary" aria-label="add" style={{position: 'fixed', right: '10px', bottom: '10px'}}>
+            <Fab aria-label="add" style={{position: 'fixed', right: '10px', bottom: '10px'}} onClick={onCardActionClick}>
                 <AddIcon />
             </Fab>
         </Box>
