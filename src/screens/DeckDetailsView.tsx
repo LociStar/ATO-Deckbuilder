@@ -10,6 +10,8 @@ import MenuItem from "@mui/material/MenuItem";
 import {EnergyCostGraph} from "../components/graphs/EnergyCostGraph.tsx";
 import {RarityGraph} from "../components/graphs/RarityGraph.tsx";
 import CharacterImage from "../components/CharacterImage.tsx";
+import {alpha} from "@mui/material/styles";
+import {AppConfig} from "../config.tsx";
 
 export default function DeckDetailsView() {
     const [deck, setDeck] = useState<Deck>();
@@ -58,7 +60,7 @@ export default function DeckDetailsView() {
         // get id from url
         const url = window.location.href;
         const deckId = Number(url.split('/').pop());
-        fetch('http://localhost:8080/deck/' + deckId
+        fetch(AppConfig.API_URL + '/deck/' + deckId
             , {
                 method: 'GET',
             })
@@ -93,29 +95,29 @@ export default function DeckDetailsView() {
     }
 
     return (
-        <Stack>
+        <Stack marginBottom={5}>
             <Stack display="flex" justifyContent="center" alignItems="center" marginBottom={3}>
-                <Typography variant="h2">
+                <Typography variant="h2" color='black'>
                     {deck?.title}
                 </Typography>
-                <Typography variant="h5">
+                <Typography variant="h5" color='black'>
                     Made by {deck?.username}
                 </Typography>
                 <Stack direction={{xs: 'column', sm: 'column', md: 'row'}} marginTop={3} display="flex"
                        alignItems="center">
                     {deck && <Box flex={1}><CharacterImage characterId={deck?.characterId!}/></Box>}
                     {deck?.description == "" ? <Box/> :
-                        <Stack padding={3} sx={{border: 1, borderRadius: 10, marginX: {xs: 1, sm: 2, md: 2}}}>
+                        <Stack padding={3} sx={{borderRadius: 3, marginX: {xs: 1, sm: 2, md: 2}, backdropFilter: 'blur(80px)', backgroundColor: alpha('#000000', 0.5)}}>
                             <Typography variant="h4">
                                 Description:
                             </Typography>
-                            <MuiMarkdown>{deck?.description}</MuiMarkdown>
+                            <MuiMarkdown overrides={{}}>{deck?.description}</MuiMarkdown>
                         </Stack>}
                 </Stack>
             </Stack>
             <Divider variant="middle"/>
             <Stack direction={{xs: 'column', sm: 'column', md: 'row'}} marginTop={3} marginLeft={10} marginRight={10}
-                   display="flex">
+                   display="flex" sx={{backdropFilter: 'blur(50px)', backgroundColor: alpha('#000000', 0.5), borderRadius: 3, padding: 2}}>
                 <List style={{flex: 1}}>
                     <Stack direction={{md: "row"}}>
                         <FormControl sx={{m: 1, minWidth: 120}} size="small">
@@ -163,7 +165,7 @@ export default function DeckDetailsView() {
                     <EnergyCostGraph cardList={deck?.cardList || []}/>
                     <RarityGraph cardList={deck?.cardList || []}/>
                 </List>
-                <Stack direction="column" marginBottom={10}
+                <Stack direction="column"
                        width="100%" style={{flex: 6}}>
                     {/* Adjust this value to control the width of the card list */}
                     <div style={{
