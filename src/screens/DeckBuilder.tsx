@@ -26,6 +26,7 @@ import {FixedSizeList} from 'react-window';
 import {AppConfig} from "../config.tsx";
 import {MuiMarkdown} from "mui-markdown";
 import {useNavigate} from "react-router-dom";
+import {Api} from "@mui/icons-material";
 
 export default function DeckBuilder() {
     const [title, setTitle] = useState('');
@@ -94,7 +95,7 @@ export default function DeckBuilder() {
         };
 
         try {
-            await fetch('http://localhost:8080/deck/upload', {
+            await fetch(AppConfig.API_URL + '/deck/upload', {
                 method: 'PUT',
                 headers: {
                     'Authorization': 'Bearer ' + auth.user?.access_token,
