@@ -10,6 +10,7 @@ import createAppState from "./utils/AppState.tsx";
 import {createContext} from "preact";
 import backgroundImage from './assets/extended-town.jpg';
 import {useEffect} from "preact/hooks";
+import {SnackbarProvider} from 'notistack';
 
 declare module '@mui/material/styles' {
     interface Theme {
@@ -110,9 +111,11 @@ export function App() {
             <AppState.Provider value={createAppState()}>
                 <AuthProvider {...oidcConfig}>
                     <ThemeProvider theme={responsiveFontSizes(theme)}>
-                        <CssBaseline/>
-                        <AppBar/>
-                        <ViewController/>
+                        <SnackbarProvider>
+                            <CssBaseline/>
+                            <AppBar/>
+                            <ViewController/>
+                        </SnackbarProvider>
                     </ThemeProvider>
                 </AuthProvider>
             </AppState.Provider>
