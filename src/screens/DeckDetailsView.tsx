@@ -25,6 +25,7 @@ import {alpha} from "@mui/material/styles";
 import {AppConfig} from "../config.tsx";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import {useAuth} from "react-oidc-context";
+import {useSnackbar} from "notistack";
 
 export default function DeckDetailsView() {
     const [deck, setDeck] = useState<Deck>();
@@ -35,6 +36,7 @@ export default function DeckDetailsView() {
     const [isFav, setIsFav] = useState(false);
     const auth = useAuth();
     const isMdScreenOrSmaller = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
+    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         if (!deck) return;
@@ -118,6 +120,13 @@ export default function DeckDetailsView() {
     }
 
     function handleFavClick() {
+        if (!auth.user) {
+            enqueueSnackbar('You need to be logged in to favorite decks', {
+                variant: 'error',
+                autoHideDuration: 5000
+            });
+            return;
+        }
         if (isFav) {
             // Remove from favorites
             fetch(AppConfig.API_URL + '/deck/' + deck?.id + '/unlike', {

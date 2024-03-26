@@ -7,6 +7,8 @@ import Box from "@mui/material/Box";
 import {AppConfig} from "../config.tsx";
 import {useNavigate} from "react-router-dom";
 import {alpha} from "@mui/material/styles";
+import {useSnackbar} from "notistack";
+import {useAuth} from "react-oidc-context";
 
 export default function DecksView() {
     const [decks, setDecks] = useState<Deck[]>([]);
@@ -14,6 +16,8 @@ export default function DecksView() {
     const [filter, setFilter] = useState('likes');
     const [characterFilter, setCharacterFilter] = useState('All');
     const navigate = useNavigate();
+    const { enqueueSnackbar } = useSnackbar();
+    const auth = useAuth();
 
     useEffect(() => {
         fetch(AppConfig.API_URL + '/character')
@@ -44,6 +48,13 @@ export default function DecksView() {
     }, [filter, characterFilter]);
 
     function onCardActionClick() {
+        if (!auth.user) {
+            enqueueSnackbar('You need to be logged in to create decks', {
+                variant: 'error',
+                autoHideDuration: 5000
+            });
+            return;
+        }
         return navigate('/deckbuilder/');
     }
 
