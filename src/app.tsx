@@ -87,7 +87,7 @@ export function App() {
 
     useEffect(() => {
         const handleMouseMove = (event: MouseEvent) => {
-            if ('ontouchstart' in window || navigator.maxTouchPoints) {
+            if ('ontouchstart' in window) {
                 return;
             }
             const x = event.clientX;
