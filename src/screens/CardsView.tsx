@@ -31,19 +31,6 @@ export default function CardsView({charClass, secondaryCharClass, component, onC
             }).then(response => response.json())
             .then(data => setCards(data));
     }
-    // effect(() => {
-    //     if (!auth.user?.access_token) return;
-    //     try {
-    //         fetchCards({
-    //             page: page,
-    //             searchQuery: searchQuery,
-    //             charClass: charClass,
-    //             secondaryCharClass: secondaryCharClass
-    //         }).then(r => r);
-    //     } catch (error) {
-    //         console.error('Error:', error);
-    //     }
-    // });
     useEffect(() => {
         try {
             fetchCards({
