@@ -1,4 +1,15 @@
-import {Box, Divider, FormControl, InputLabel, List, Select, SelectChangeEvent, Stack} from "@mui/material";
+import {
+    Box,
+    Button,
+    Divider,
+    FormControl,
+    InputLabel,
+    List,
+    Select,
+    SelectChangeEvent,
+    Stack,
+    Theme, useMediaQuery
+} from "@mui/material";
 import {useState, useEffect} from "preact/hooks";
 import {Card, Deck} from "../types/types";
 import CardComponent from "../components/CardComponent.tsx";
@@ -12,6 +23,8 @@ import {RarityGraph} from "../components/graphs/RarityGraph.tsx";
 import CharacterImage from "../components/CharacterImage.tsx";
 import {alpha} from "@mui/material/styles";
 import {AppConfig} from "../config.tsx";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import {useAuth} from "react-oidc-context";
 
 export default function DeckDetailsView() {
     const [deck, setDeck] = useState<Deck>();
@@ -19,6 +32,21 @@ export default function DeckDetailsView() {
     const [cardCraftingModifier, setCardCraftingModifier] = useState(1);
     const [cardUpgradingModifier, setCardUpgradingModifier] = useState(1);
     const [filter, setFilter] = useState('energy');
+    const [isFav, setIsFav] = useState(false);
+    const auth = useAuth();
+    const isMdScreenOrSmaller = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
+
+    useEffect(() => {
+        if (!deck) return;
+        fetch(AppConfig.API_URL + '/deck/' + deck.id + '/isliked', {
+            headers: {
+                'Authorization': 'Bearer ' + auth.user?.access_token,
+            },
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .then(data => setIsFav(data));
+    }, [auth]);
 
     useEffect(() => {
         if (!deck?.cardList) return;
@@ -65,13 +93,8 @@ export default function DeckDetailsView() {
                 method: 'GET',
             })
             .then(response => response.json())
-            // .then(data => {
-            //     console.log(data);
-            //     return data;
-            // })
             .then(data => {
                 setDeck(data);
-
                 // Sort the cards by filter
                 switch (filter) {
                     case 'rarity':
@@ -94,8 +117,38 @@ export default function DeckDetailsView() {
         setFilter(target.value);
     }
 
+    function handleFavClick() {
+        if (isFav) {
+            // Remove from favorites
+            fetch(AppConfig.API_URL + '/deck/' + deck?.id + '/unlike', {
+                headers: {
+                    'Authorization': 'Bearer ' + auth.user?.access_token,
+                },
+                method: 'POST'
+            }).then(response => {
+                if (!response.ok) {
+                    console.log('Error unfavouring deck');
+                }
+            });
+        } else {
+            // Add to favorites
+            fetch(AppConfig.API_URL + '/deck/' + deck?.id + '/like', {
+                headers: {
+                    'Authorization': 'Bearer ' + auth.user?.access_token,
+                },
+                method: 'POST'
+            }).then(response => {
+                if (!response.ok) {
+                    console.log('Error favouring deck');
+                }
+            });
+
+        }
+        setIsFav(!isFav);
+    }
+
     return (
-        <Stack marginBottom={5}>
+        <Stack marginBottom={5} marginX={{md: 5, xs: 2}}>
             <Stack display="flex" justifyContent="center" alignItems="center" marginBottom={3}>
                 <Typography variant="h2" color='black'>
                     {deck?.title}
@@ -104,10 +157,31 @@ export default function DeckDetailsView() {
                     Made by {deck?.username}
                 </Typography>
                 <Stack direction={{xs: 'column', sm: 'column', md: 'row'}} marginTop={3} display="flex"
-                       alignItems="center">
-                    {deck && <Box flex={1}><CharacterImage characterId={deck?.characterId!}/></Box>}
+                       alignItems="center" spacing={1}>
+                    {deck &&
+                        <Stack flex={1} justifyContent="center" alignItems="center">
+                            <CharacterImage characterId={deck?.characterId!}/>
+                            <Button color="primary"
+                                    size="large"
+                                    aria-label="add to favorites"
+                                    style={{
+                                        maxWidth: 140,
+                                        borderRadius: 5,
+                                        backdropFilter: 'blur(50px)',
+                                        backgroundColor: alpha('#000000', 0.5)
+                                    }}
+                                    onClick={handleFavClick}>
+                                <Typography mr={1} color={"white"}>Favorite</Typography>
+                                <FavoriteIcon color={isFav ? "error" : "inherit"}/>
+                            </Button>
+                        </Stack>}
                     {deck?.description == "" ? <Box/> :
-                        <Stack padding={3} sx={{borderRadius: 3, marginX: {xs: 1, sm: 2, md: 2}, backdropFilter: 'blur(80px)', backgroundColor: alpha('#000000', 0.5)}}>
+                        <Stack padding={3} sx={{
+                            borderRadius: 3,
+                            marginX: {xs: 1, sm: 2, md: 2},
+                            backdropFilter: 'blur(80px)',
+                            backgroundColor: alpha('#000000', 0.5)
+                        }}>
                             <Typography variant="h4">
                                 Description:
                             </Typography>
@@ -116,8 +190,17 @@ export default function DeckDetailsView() {
                 </Stack>
             </Stack>
             <Divider variant="middle"/>
-            <Stack direction={{xs: 'column', sm: 'column', md: 'row'}} marginTop={3} marginLeft={10} marginRight={10}
-                   display="flex" sx={{backdropFilter: 'blur(50px)', backgroundColor: alpha('#000000', 0.5), borderRadius: 3, padding: 2}}>
+            <Stack
+                direction={{xs: 'column', sm: 'column', md: 'row'}}
+                marginTop={3}
+                display="flex"
+                sx={{
+                    width: "100%",
+                    backdropFilter: 'blur(50px)',
+                    backgroundColor: alpha('#000000', 0.5),
+                    borderRadius: 3,
+                    padding: 2
+                }}>
                 <List style={{flex: 1}}>
                     <Stack direction={{md: "row"}}>
                         <FormControl sx={{m: 1, minWidth: 120}} size="small">
@@ -170,7 +253,7 @@ export default function DeckDetailsView() {
                     {/* Adjust this value to control the width of the card list */}
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                        gridTemplateColumns: isMdScreenOrSmaller ? 'repeat(auto-fit, minmax(100px, 1fr))' : 'repeat(auto-fit, minmax(200px, 1fr))',
                         gridGap: '10px'
                     }}>
                         {deck && deck.cardList.map((card) => (
