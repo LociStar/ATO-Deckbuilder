@@ -17,7 +17,6 @@ export const EnergyCostGraph: React.FC<EnergyCostGraphProps> = ({cardList}) => {
 
     useEffect(() => {
         let totalEnergyCost = 0;
-        console.log(cardList)
         const costs = cardList.reduce((acc: number[], card: Card) => {
             if (card.energyCost == 0)
                 acc[0]++;
