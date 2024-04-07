@@ -48,7 +48,7 @@ export default function DeckDetailsView() {
         })
             .then(response => response.json())
             .then(data => setIsFav(data));
-    }, [auth]);
+    }, [auth, deck?.id]);
 
     useEffect(() => {
         if (!deck?.cardList) return;
