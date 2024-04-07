@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import MenuItem from "@mui/material/MenuItem";
-import CardsView from "./CardsView.tsx";
+import CardsLoader from "../components/CardsLoader.tsx";
 import {useEffect, useState} from "preact/hooks";
 import {Card, Character} from "../types/types.tsx";
 import Typography from "@mui/material/Typography";
@@ -26,7 +26,6 @@ import {FixedSizeList} from 'react-window';
 import {AppConfig} from "../config.tsx";
 import {MuiMarkdown} from "mui-markdown";
 import {useNavigate} from "react-router-dom";
-import {Api} from "@mui/icons-material";
 
 export default function DeckBuilder() {
     const [title, setTitle] = useState('');
@@ -210,10 +209,10 @@ export default function DeckBuilder() {
                             <CustomSearch/>
                         </Box>
                         {selectedCharacter &&
-                            <CardsView component={true}
-                                       charClass={chars.find(char => char.characterId === selectedCharacter)?.characterClass || ''}
-                                       secondaryCharClass={chars.find(char => char.characterId === selectedCharacter)?.secondaryCharacterClass || ''}
-                                       onCardClick={addCardToList}/>
+                            <CardsLoader fixed_buttons={true}
+                                         charClass={chars.find(char => char.characterId === selectedCharacter)?.characterClass || ''}
+                                         secondaryCharClass={chars.find(char => char.characterId === selectedCharacter)?.secondaryCharacterClass || ''}
+                                         onCardClick={addCardToList}/>
                         }
                     </Grid>
                 </Grid>

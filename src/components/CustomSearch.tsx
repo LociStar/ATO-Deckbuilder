@@ -1,7 +1,7 @@
 import SearchIcon from "@mui/icons-material/Search";
 import {alpha, styled} from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
-import {AppState} from "../app.tsx";
+import {AppState} from "../screens/ViewController.tsx"
 import {useContext} from "preact/hooks";
 
 const Search = styled('div')(({theme}) => ({

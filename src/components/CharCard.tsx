@@ -5,7 +5,7 @@ import {useState} from "preact/hooks";
 import {Deck} from "../types/types.tsx";
 import {Box, Button, Hidden, Stack} from "@mui/material";
 import {useContext} from "preact/hooks";
-import {AppState} from "../app.tsx";
+import {AppState} from "../screens/ViewController.tsx"
 import {useNavigate} from "react-router-dom";
 import {AppConfig} from "../config.tsx";
 import {alpha} from "@mui/material/styles";
