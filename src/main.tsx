@@ -1,5 +1,7 @@
-import { render } from 'preact'
-import { App } from './app.tsx'
+import {render} from 'preact'
 import './index.css'
+import ViewController from "./screens/ViewController.tsx";
 
-render(<App />, document.getElementById('app')!)
+render(
+    <ViewController/>
+    , document.getElementById('app')!)

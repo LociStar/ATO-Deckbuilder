@@ -1,16 +1,14 @@
 import './app.css'
 
 import {createTheme, CssBaseline, responsiveFontSizes, ThemeProvider} from "@mui/material";
-import AppBar from "./components/AppBar.tsx";
-import {oidcConfig} from "./config.tsx";
-import {AuthProvider} from "react-oidc-context";
-import ViewController from "./screens/ViewController.tsx";
-//import CantoraOne from "./fonts/font.ttf";
-import createAppState from "./utils/AppState.tsx";
-import {createContext} from "preact";
 import backgroundImage from './assets/extended-town.jpg';
 import {useEffect} from "preact/hooks";
 import {SnackbarProvider} from 'notistack';
+import TemporaryDrawer from "./components/TemporaryDrawer.tsx";
+import {Outlet} from "react-router-dom";
+import PrimarySearchAppBar from "./components/AppBar.tsx";
+import {oidcConfig} from "./config.tsx";
+import {AuthProvider} from "react-oidc-context";
 
 declare module '@mui/material/styles' {
     interface Theme {
@@ -19,16 +17,6 @@ declare module '@mui/material/styles' {
         };
         topography: {
             fontFamily: string;
-        }
-    }
-
-    // allow configuration using `createTheme`
-    interface ThemeOptions {
-        status?: {
-            danger?: string;
-        };
-        topography?: {
-            fontFamily?: string;
         }
     }
 }
@@ -81,9 +69,6 @@ const theme = createTheme({
         },
     },
 });
-
-export const AppState = createContext(createAppState());
-
 export function App() {
 
     useEffect(() => {
@@ -107,18 +92,18 @@ export function App() {
     }, []);
 
     return (
+
         <div className="App">
-            <AppState.Provider value={createAppState()}>
-                <AuthProvider {...oidcConfig}>
-                    <ThemeProvider theme={responsiveFontSizes(theme)}>
-                        <SnackbarProvider>
-                            <CssBaseline/>
-                            <AppBar/>
-                            <ViewController/>
-                        </SnackbarProvider>
-                    </ThemeProvider>
-                </AuthProvider>
-            </AppState.Provider>
+            <AuthProvider {...oidcConfig}>
+            <ThemeProvider theme={responsiveFontSizes(theme)}>
+                <SnackbarProvider>
+                    <CssBaseline/>
+                    <PrimarySearchAppBar/>
+                    <TemporaryDrawer/>
+                    <Outlet/>
+                </SnackbarProvider>
+            </ThemeProvider>
+            </AuthProvider>
         </div>
     );
 }
