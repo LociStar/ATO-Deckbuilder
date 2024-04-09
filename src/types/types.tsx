@@ -20,6 +20,11 @@ export type Deck = {
     cardList: Card[];
 };
 
+export type PagedDeck = {
+    decks: Deck[];
+    pages: number;
+}
+
 export type Character = {
     characterId: string;
     characterClass: string;
