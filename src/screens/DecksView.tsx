@@ -1,7 +1,7 @@
-import {Fab, Stack, Select, MenuItem, FormControl, InputLabel} from "@mui/material";
+import {Fab, FormControl, InputLabel, MenuItem, Pagination, Select, Stack} from "@mui/material";
 import CharCard from "../components/CharCard";
-import {useState, useEffect} from "preact/hooks";
-import {Deck, Character} from "../types/types";
+import {useEffect, useState} from "preact/hooks";
+import {Character, Deck, PagedDeck} from "../types/types";
 import AddIcon from '@mui/icons-material/Add';
 import Box from "@mui/material/Box";
 import {AppConfig} from "../config.tsx";
@@ -12,40 +12,35 @@ import {useAuth} from "react-oidc-context";
 
 export default function DecksView() {
     const [decks, setDecks] = useState<Deck[]>([]);
-    const [characters, setCharacters] = useState<Character[]>([]);
+    const defaultCharacter: Character = {characterId: 'All', characterClass: '', secondaryCharacterClass: ''};
+    const [characters, setCharacters] = useState<Character[]>([defaultCharacter]);
     const [filter, setFilter] = useState('likes');
-    const [characterFilter, setCharacterFilter] = useState('All');
+    const [characterFilter, setCharacterFilter] = useState<String>('All');
+    const [pages, setPages] = useState(0);
+    const [page, setPage] = useState(1);
     const navigate = useNavigate();
-    const { enqueueSnackbar } = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
     const auth = useAuth();
 
     useEffect(() => {
         fetch(AppConfig.API_URL + '/character')
             .then(response => response.json())
-            .then(data => setCharacters(data));
+            .then(data => {
+                data = [defaultCharacter, ...data]
+                setCharacters(data);
+            });
     }, []);
 
     useEffect(() => {
-        fetch(AppConfig.API_URL + '/deck')
+        let charId = characterFilter === 'All' ? '' : characterFilter;
+        let sortByLikesFirst = filter === 'likes';
+        fetch(AppConfig.API_URL + `/deck?size=10&page=${page}&charId=${charId}&sortByLikesFirst=${sortByLikesFirst}`)
             .then(response => response.json())
-            .then(data => {
-                let sortedData;
-                switch (filter) {
-                    case 'likes':
-                        sortedData = data.sort((a: Deck, b: Deck) => b.likes - a.likes);
-                        break;
-                    case 'name':
-                        sortedData = data.sort((a: Deck, b: Deck) => a.title.localeCompare(b.title));
-                        break;
-                    default:
-                        sortedData = data;
-                }
-                if (characterFilter !== 'All') {
-                    sortedData = sortedData.filter((deck: Deck) => deck.characterId === characterFilter);
-                }
-                setDecks(sortedData);
+            .then((data: PagedDeck) => {
+                setPages(data.pages)
+                setDecks(data.decks);
             });
-    }, [filter, characterFilter]);
+    }, [filter, characterFilter, page]);
 
     function onCardActionClick() {
         if (!auth.user) {
@@ -67,7 +62,7 @@ export default function DecksView() {
                     backdropFilter: 'blur(50px)',
                     backgroundColor: alpha('#000000', 0.5),
                 }}>
-                    <FormControl sx={{minWidth: 100 }}>
+                    <FormControl sx={{minWidth: 100}}>
                         <InputLabel id="filter-label">Sort By</InputLabel>
                         <Select
                             labelId="filter-label"
@@ -80,16 +75,18 @@ export default function DecksView() {
                             <MenuItem value={'name'}>Name</MenuItem>
                         </Select>
                     </FormControl>
-                    <FormControl sx={{minWidth: 120 }}>
+                    <FormControl sx={{minWidth: 120}}>
                         <InputLabel id="character-filter-label">Character Filter</InputLabel>
                         <Select
                             labelId="character-filter-label"
                             id="character-filter-select"
                             value={characterFilter}
                             label="Character Filter"
-                            onChange={(e) => setCharacterFilter((e.target as HTMLSelectElement).value)}
+                            onChange={(e) => {
+                                const target = e.target as HTMLInputElement;
+                                setCharacterFilter(target.value);
+                            }}
                         >
-                            <MenuItem value={'All'}>All</MenuItem>
                             {characters.map((character) => (
                                 <MenuItem key={character.characterId} value={character.characterId}>
                                     {character.characterId}
@@ -101,6 +98,15 @@ export default function DecksView() {
                 {decks.map((deck) => (
                     <CharCard key={deck.id} deck={deck}/>
                 ))}
+                <Pagination count={pages} page={page} onChange={(_event, value) => {
+                    setPage(value);
+                }} color="primary"
+                            sx={{
+                                marginTop: 2,
+                                backdropFilter: 'blur(50px)',
+                                backgroundColor: alpha('#000000', 0.5),
+                                borderRadius: 1
+                            }}/>
             </Stack>
             <Fab aria-label="add" style={{position: 'fixed', right: '10px', bottom: '10px'}}
                  onClick={onCardActionClick}>
