@@ -98,6 +98,10 @@ export default function DecksView() {
                 {decks.map((deck) => (
                     <CharCard key={deck.id} deck={deck}/>
                 ))}
+                <Fab aria-label="add"
+                     onClick={onCardActionClick}>
+                    <AddIcon/>
+                </Fab>
                 <Pagination count={pages} page={page} onChange={(_event, value) => {
                     setPage(value);
                 }} color="primary"
@@ -108,10 +112,6 @@ export default function DecksView() {
                                 borderRadius: 1
                             }}/>
             </Stack>
-            <Fab aria-label="add" style={{position: 'fixed', right: '10px', bottom: '10px'}}
-                 onClick={onCardActionClick}>
-                <AddIcon/>
-            </Fab>
         </Box>
     );
 }
