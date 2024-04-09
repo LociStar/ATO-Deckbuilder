@@ -15,13 +15,16 @@ import RenderOnAnonymous from "./conditionals/RenderOnAnonymous.tsx";
 import CustomSearch from "./CustomSearch.tsx";
 import {AppState} from "../screens/ViewController.tsx";
 import AppBar from '@mui/material/AppBar';
-
+import logo from "../assets/LOGO-ATO.png";
+import {useNavigate} from "react-router-dom";
+import {Button} from "@mui/material";
 
 
 export default function PrimarySearchAppBar() {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
     const state = useContext(AppState);
+    const navigate = useNavigate();
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -127,54 +130,58 @@ export default function PrimarySearchAppBar() {
     );
 
     return (<AppBar position={"sticky"} sx={{mb: 2}}>
-                <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="open drawer"
-                        sx={{mr: 2}}
-                        onClick={handleAppMenuOpen}
-                    >
-                        <MenuIcon/>
-                    </IconButton>
+            <Toolbar>
+                <IconButton
+                    size="large"
+                    edge="start"
+                    color="inherit"
+                    aria-label="open drawer"
+                    sx={{mr: 0}}
+                    onClick={handleAppMenuOpen}
+                >
+                    <MenuIcon/>
+                </IconButton>
+                <Button  onClick={() => navigate("/")}>
+                    <img style={{width: 45}} src={logo} alt="Logo"/>
                     <Typography
                         variant="h6"
                         noWrap
-                        sx={{display: {xs: 'none', sm: 'block'}}}
+                        color={"textPrimary"}
+                        sx={{display: {xs: 'none', sm: 'block'}, marginLeft: 1}}
                     >
                         ATO-Deckbuilder
                     </Typography>
-                    <CustomSearch/>
-                    <Box sx={{flexGrow: 1}}/>
-                    <Box sx={{display: {xs: 'none', md: 'flex'}}}>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
-                        >
-                            <AccountCircle/>
-                        </IconButton>
-                    </Box>
-                    <Box sx={{display: {xs: 'flex', md: 'none'}}}>
-                        <IconButton
-                            size="large"
-                            aria-label="show more"
-                            aria-controls={mobileMenuId}
-                            aria-haspopup="true"
-                            onClick={handleMobileMenuOpen}
-                            color="inherit"
-                        >
-                            <MoreIcon/>
-                        </IconButton>
-                    </Box>
-                </Toolbar>
-                {renderMobileMenu}
-                {renderMenu}
-            </AppBar>
+                </Button>
+                <CustomSearch/>
+                <Box sx={{flexGrow: 1}}/>
+                <Box sx={{display: {xs: 'none', md: 'flex'}}}>
+                    <IconButton
+                        size="large"
+                        edge="end"
+                        aria-label="account of current user"
+                        aria-controls={menuId}
+                        aria-haspopup="true"
+                        onClick={handleProfileMenuOpen}
+                        color="inherit"
+                    >
+                        <AccountCircle/>
+                    </IconButton>
+                </Box>
+                <Box sx={{display: {xs: 'flex', md: 'none'}}}>
+                    <IconButton
+                        size="large"
+                        aria-label="show more"
+                        aria-controls={mobileMenuId}
+                        aria-haspopup="true"
+                        onClick={handleMobileMenuOpen}
+                        color="inherit"
+                    >
+                        <MoreIcon/>
+                    </IconButton>
+                </Box>
+            </Toolbar>
+            {renderMobileMenu}
+            {renderMenu}
+        </AppBar>
     );
 }
