@@ -9,6 +9,7 @@ import {Outlet} from "react-router-dom";
 import PrimarySearchAppBar from "./components/AppBar.tsx";
 import {oidcConfig} from "./config.tsx";
 import {AuthProvider} from "react-oidc-context";
+import Footer from "./components/Footer.tsx";
 
 declare module '@mui/material/styles' {
     interface Theme {
@@ -93,14 +94,17 @@ export function App() {
 
     return (
 
-        <div className="App">
+        <div className="App" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <AuthProvider {...oidcConfig}>
             <ThemeProvider theme={responsiveFontSizes(theme)}>
                 <SnackbarProvider>
                     <CssBaseline/>
                     <PrimarySearchAppBar/>
                     <TemporaryDrawer/>
-                    <Outlet/>
+                    <div style={{flexGrow: 1, marginBottom: 10}}>
+                        <Outlet/>
+                    </div>
+                    <Footer/>
                 </SnackbarProvider>
             </ThemeProvider>
             </AuthProvider>
