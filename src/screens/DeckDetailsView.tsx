@@ -39,10 +39,10 @@ export default function DeckDetailsView() {
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
-        if (!deck) return;
+        if (!deck || !auth.user) return;
         fetch(AppConfig.API_URL + '/deck/' + deck.id + '/isliked', {
             headers: {
-                'Authorization': 'Bearer ' + auth.user?.access_token,
+                'Authorization': 'Bearer ' + auth.user.access_token,
             },
             method: 'GET'
         })
