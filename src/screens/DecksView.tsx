@@ -9,6 +9,7 @@ import {useNavigate} from "react-router-dom";
 import {alpha} from "@mui/material/styles";
 import {useSnackbar} from "notistack";
 import {useAuth} from "react-oidc-context";
+import RenderOnAuthenticated from "../components/conditionals/RenderOnAuthenticated.tsx";
 
 export default function DecksView() {
     const [decks, setDecks] = useState<Deck[]>([]);
@@ -16,6 +17,7 @@ export default function DecksView() {
     const [characters, setCharacters] = useState<Character[]>([defaultCharacter]);
     const [filter, setFilter] = useState('likes');
     const [characterFilter, setCharacterFilter] = useState<String>('All');
+    const [ownedFilter, setOwnedFilter] = useState<String>('All');
     const [pages, setPages] = useState(0);
     const [page, setPage] = useState(1);
     const navigate = useNavigate();
@@ -34,13 +36,13 @@ export default function DecksView() {
     useEffect(() => {
         let charId = characterFilter === 'All' ? '' : characterFilter;
         let sortByLikesFirst = filter === 'likes';
-        fetch(AppConfig.API_URL + `/deck?size=10&page=${page}&charId=${charId}&sortByLikesFirst=${sortByLikesFirst}`)
+        fetch(AppConfig.API_URL + `/deck?size=10&page=${page}&charId=${charId}&sortByLikesFirst=${sortByLikesFirst}&ownedFilter=${ownedFilter}&userName=${auth.user? auth.user.profile.preferred_username: ""}`)
             .then(response => response.json())
             .then((data: PagedDeck) => {
                 setPages(data.pages)
                 setDecks(data.decks);
             });
-    }, [filter, characterFilter, page]);
+    }, [filter, characterFilter, page, ownedFilter]);
 
     function onCardActionClick() {
         if (!auth.user) {
@@ -76,12 +78,12 @@ export default function DecksView() {
                         </Select>
                     </FormControl>
                     <FormControl sx={{minWidth: 120}}>
-                        <InputLabel id="character-filter-label">Character Filter</InputLabel>
+                        <InputLabel id="character-filter-label">Character</InputLabel>
                         <Select
                             labelId="character-filter-label"
                             id="character-filter-select"
                             value={characterFilter}
-                            label="Character Filter"
+                            label="Character"
                             onChange={(e) => {
                                 const target = e.target as HTMLInputElement;
                                 setCharacterFilter(target.value);
@@ -94,6 +96,25 @@ export default function DecksView() {
                             ))}
                         </Select>
                     </FormControl>
+                    <RenderOnAuthenticated>
+                        <FormControl sx={{minWidth: 120}}>
+                            <InputLabel id="ownership-filter-label">Ownership</InputLabel>
+                            <Select
+                                labelId="ownership-filter-label"
+                                id="ownership-filter-select"
+                                value={ownedFilter}
+                                label="Ownership"
+                                onChange={(e) => {
+                                    const target = e.target as HTMLInputElement;
+                                    setOwnedFilter(target.value);
+                                }}
+                            >
+                                <MenuItem value={'All'}>All</MenuItem>
+                                <MenuItem value={'Owned'}>Owned</MenuItem>
+                                <MenuItem value={'Unowned'}>Unowned</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </RenderOnAuthenticated>
                 </Stack>
                 {decks.map((deck) => (
                     <CharCard key={deck.id} deck={deck}/>
