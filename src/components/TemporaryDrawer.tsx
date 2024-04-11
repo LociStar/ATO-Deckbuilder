@@ -53,8 +53,8 @@ export default function TemporaryDrawer() {
             <Divider/>
             <List>
                 <ListItem>
-                    <ListItemButton>
-                        <ListItemText primary="Home"/>
+                    <ListItemButton component={Link} to={'https://github.com/LociStar/ATO-Deckbuilder'}>
+                        <ListItemText primary="Support"/>
                     </ListItemButton>
                 </ListItem>
             </List>
