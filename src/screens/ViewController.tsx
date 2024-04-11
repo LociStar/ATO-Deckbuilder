@@ -6,6 +6,8 @@ import {App} from "../app.tsx";
 import createAppState from "../utils/AppState.tsx";
 import {createContext} from "preact";
 import CardsView from "./CardsView.tsx";
+import TermsOfService from "./TermsOfServiceView.tsx";
+import PrivacyPolicy from "./PrivacyPolicyView.tsx";
 
 export const AppState = createContext(createAppState());
 
@@ -32,6 +34,14 @@ export default function ViewController() {
                     path: "/cards-wiki",
                     element: <CardsView/>,
                 },
+                {
+                    path: "/terms-of-service",
+                    element: <TermsOfService/>,
+                },
+                {
+                    path: "/privacy-policy",
+                    element: <PrivacyPolicy/>,
+                }
             ],
         },
     ]);
