@@ -2,7 +2,7 @@ import { h } from 'preact';
 import { useAuth } from "react-oidc-context";
 
 interface Props {
-    children: h.JSX.Element[];
+    children: h.JSX.Element | h.JSX.Element[];
 }
 
 const RenderOnAuthenticated = ({children}: Props) => (useAuth().isAuthenticated) ? <>{children}</> : null;
