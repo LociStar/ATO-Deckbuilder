@@ -8,9 +8,10 @@ import {
     Select,
     SelectChangeEvent,
     Stack,
-    Theme, useMediaQuery
+    Theme,
+    useMediaQuery
 } from "@mui/material";
-import {useState, useEffect} from "preact/hooks";
+import {useEffect, useState} from "preact/hooks";
 import {Card, Deck} from "../types/types";
 import CardComponent from "../components/CardComponent.tsx";
 import Typography from "@mui/material/Typography";
@@ -26,6 +27,8 @@ import {AppConfig} from "../config.tsx";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import {useAuth} from "react-oidc-context";
 import {useSnackbar} from "notistack";
+import RenderOnAuthenticated from "../components/conditionals/RenderOnAuthenticated.tsx";
+import {useNavigate} from "react-router-dom";
 
 export default function DeckDetailsView() {
     const [deck, setDeck] = useState<Deck>();
@@ -36,7 +39,8 @@ export default function DeckDetailsView() {
     const [isFav, setIsFav] = useState(false);
     const auth = useAuth();
     const isMdScreenOrSmaller = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
-    const { enqueueSnackbar } = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!deck || !auth.user) return;
@@ -158,13 +162,28 @@ export default function DeckDetailsView() {
 
     return (
         <Stack marginBottom={5} marginX={{md: 5, xs: 2}}>
-            <Stack display="flex" justifyContent="center" alignItems="center" marginBottom={3}>
+            <Stack display="flex" justifyContent="space-between" alignItems="center" marginBottom={3}>
                 <Typography variant="h2" color='black'>
                     {deck?.title}
                 </Typography>
                 <Typography variant="h5" color='black'>
                     Made by {deck?.username}
                 </Typography>
+                <RenderOnAuthenticated>
+                    {auth.user?.profile.preferred_username == deck?.username ?
+                        <Button color="primary"
+                                style={{
+                                    position: isMdScreenOrSmaller ? '' : 'absolute',
+                                    right: isMdScreenOrSmaller ? '' : '1%',
+                                    marginTop: isMdScreenOrSmaller ? 15 : 0,
+                                    borderRadius: 5,
+                                    backdropFilter: 'blur(50px)',
+                                    backgroundColor: alpha('#000000', 0.5)
+                                }}
+                                onClick={() => navigate("/deckeditor/" + deck!.id)}>
+                            <Typography color={"white"}>Edit</Typography>
+                        </Button> : <div/>}
+                </RenderOnAuthenticated>
                 <Stack direction={{xs: 'column', sm: 'column', md: 'row'}} marginTop={3} display="flex"
                        alignItems="center" spacing={1}>
                     {deck &&
