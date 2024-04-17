@@ -10,23 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      - name: Get version
+        id: package
+        run: |
+          echo "::set-output name=version::$(node -p "require('./package.json').version")"
 
-    - name: Login to Docker Registry
-      uses: docker/login-action@v1 
-      with:
-        registry: registry.organizer-bot.com
-        username: ${{ secrets.REGISTRY_USERNAME }}
-        password: ${{ secrets.REGISTRY_PASSWORD }}
-
-    - name: Build and push
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        push: true
-        tags: registry.organizer-bot.com/your-repo-name:latest
-        platforms: linux/x86_64
+      - name: Build and push Docker image
+        run: |
+          docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }} ghcr.io
+          docker build -t ghcr.io/locistar/ato-deckbuilder-web:${{ steps.package.outputs.version }} .
+          docker push ghcr.io/locistar/ato-deckbuilder-web:${{ steps.package.outputs.version }}
