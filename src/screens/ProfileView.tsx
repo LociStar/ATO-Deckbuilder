@@ -2,7 +2,7 @@ import {Box, TextField, Button, Stack} from '@mui/material';
 import {alpha} from '@mui/system';
 import {useAuth} from "react-oidc-context";
 import {useEffect, useState} from "preact/hooks";
-import {AppConfig} from "../config.tsx";
+import {AppConfig} from "../config.ts";
 import {useSnackbar} from "notistack";
 
 export default function ProfileView() {
