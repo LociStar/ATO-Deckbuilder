@@ -8,6 +8,7 @@ import {createContext} from "preact";
 import CardsView from "./CardsView.tsx";
 import TermsOfService from "./TermsOfServiceView.tsx";
 import PrivacyPolicy from "./PrivacyPolicyView.tsx";
+import DeckEditor from "./DeckEditorView.tsx";
 
 export const AppState = createContext(createAppState());
 
@@ -41,7 +42,11 @@ export default function ViewController() {
                 {
                     path: "/privacy-policy",
                     element: <PrivacyPolicy/>,
-                }
+                },
+                {
+                    path: "/deckeditor/*",
+                    element: <DeckEditor/>,
+                },
             ],
         },
     ]);
