@@ -7,7 +7,7 @@ import {SnackbarProvider} from 'notistack';
 import TemporaryDrawer from "./components/TemporaryDrawer.tsx";
 import {Outlet} from "react-router-dom";
 import PrimarySearchAppBar from "./components/AppBar.tsx";
-import {oidcConfig} from "./config.tsx";
+import {oidcConfig} from "./config.ts";
 import {AuthProvider} from "react-oidc-context";
 import Footer from "./components/Footer.tsx";
 
