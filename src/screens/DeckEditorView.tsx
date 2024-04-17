@@ -44,7 +44,9 @@ export default function DeckEditor() {
     const [isSaving, setIsSaving] = useState(false);
     const [chars, setChars] = useState<Character[]>([]);
     const [cardCost, setCardCost] = useState(0);
+    // @ts-ignore
     const [cardCraftingModifier, setCardCraftingModifier] = useState(1);
+    // @ts-ignore
     const [cardUpgradingModifier, setCardUpgradingModifier] = useState(1);
     const [tabValue, setTabValue] = useState(0);
     const [open, setOpen] = useState(false);
