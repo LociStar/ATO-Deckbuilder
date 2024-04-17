@@ -18,13 +18,11 @@ export default function CardsLoader({charClass, secondaryCharClass, fixed_button
 
     // Define card size
     const CARD_WIDTH = isMdScreenOrSmaller ? 100 : 200; // Adjust this value based on your card size
-    const CARD_HEIGHT = 352; // Adjust this value based on your card size
+    // const CARD_HEIGHT = 352; // Adjust this value based on your card size
 
     // Calculate the number of cards that can fit on the screen
     const cardsPerRow = Math.floor(window.innerWidth / CARD_WIDTH);
-    console.log(cardsPerRow)
-    const cardsPerColumn = Math.floor(window.innerHeight / CARD_HEIGHT);
-    console.log(cardsPerColumn)
+    // const cardsPerColumn = Math.floor(window.innerHeight / CARD_HEIGHT);
     const totalCardsOnScreen = cardsPerRow * 3;
 
     // Reset page to 0 when searchQuery changes
