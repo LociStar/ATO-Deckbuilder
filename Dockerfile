@@ -7,7 +7,8 @@ COPY . ./
 RUN npm run build
 
 # Stage 2 - the production environment
-FROM nginx:1.21.1-alpine
-COPY --from=build-deps /usr/src/app/dist /usr/share/nginx/html
+FROM node:21
+COPY --from=build-deps /usr/src/app/dist /app
+RUN npm install -g serve
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["serve", "-s", "/app", "-l", "80"]
