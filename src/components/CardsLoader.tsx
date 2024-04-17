@@ -3,7 +3,7 @@ import {Button, Stack, Theme, useMediaQuery} from "@mui/material";
 import {Card} from "../types/types.tsx";
 import CardComponent from "../components/CardComponent.tsx";
 import {AppState} from "../screens/ViewController.tsx";
-import {AppConfig} from "../config.tsx";
+import {AppConfig} from "../config.ts";
 
 export default function CardsLoader({charClass, secondaryCharClass, fixed_buttons, onCardClick}: {
     charClass: string,

@@ -23,7 +23,7 @@ import {alpha} from "@mui/material/styles";
 import {EnergyCostGraph} from "../components/graphs/EnergyCostGraph.tsx";
 import {RarityGraph} from "../components/graphs/RarityGraph.tsx";
 import {FixedSizeList} from 'react-window';
-import {AppConfig} from "../config.tsx";
+import {AppConfig} from "../config.ts";
 import {MuiMarkdown} from "mui-markdown";
 import {useNavigate} from "react-router-dom";
 

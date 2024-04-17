@@ -1,5 +1,5 @@
 import {useEffect, useState} from "preact/hooks";
-import {AppConfig} from "../config.tsx";
+import {AppConfig} from "../config.ts";
 import {Container} from "@mui/material";
 import {alpha} from "@mui/material/styles";
 

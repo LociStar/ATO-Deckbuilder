@@ -1,6 +1,6 @@
 import {useEffect, useState} from "preact/hooks";
 import {Card} from "../types/types";
-import {AppConfig} from "../config.tsx";
+import {AppConfig} from "../config.ts";
 
 // Create a cache object outside the component
 const imageCache: {[key: string]: string} = {};

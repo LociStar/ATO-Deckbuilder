@@ -23,7 +23,7 @@ import {EnergyCostGraph} from "../components/graphs/EnergyCostGraph.tsx";
 import {RarityGraph} from "../components/graphs/RarityGraph.tsx";
 import CharacterImage from "../components/CharacterImage.tsx";
 import {alpha} from "@mui/material/styles";
-import {AppConfig} from "../config.tsx";
+import {AppConfig} from "../config.ts";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import {useAuth} from "react-oidc-context";
 import {useSnackbar} from "notistack";

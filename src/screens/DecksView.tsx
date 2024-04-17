@@ -4,7 +4,7 @@ import {useEffect, useState} from "preact/hooks";
 import {Character, Deck, PagedDeck} from "../types/types";
 import AddIcon from '@mui/icons-material/Add';
 import Box from "@mui/material/Box";
-import {AppConfig} from "../config.tsx";
+import {AppConfig} from "../config.ts";
 import {useNavigate} from "react-router-dom";
 import {alpha} from "@mui/material/styles";
 import {useSnackbar} from "notistack";

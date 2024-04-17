@@ -7,7 +7,7 @@ import {Box, Button, Hidden, Stack} from "@mui/material";
 import {useContext} from "preact/hooks";
 import {AppState} from "../screens/ViewController.tsx"
 import {useNavigate} from "react-router-dom";
-import {AppConfig} from "../config.tsx";
+import {AppConfig} from "../config.ts";
 import {alpha} from "@mui/material/styles";
 
 export default function CharBuilds({deck}: { deck: Deck }) {
