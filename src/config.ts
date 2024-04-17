@@ -3,7 +3,7 @@ const AppConfig = {
     REDIRECT_URL_PROD: 'https://ato-deckbuilder.com/',
     //REDIRECT_URL_DEV: 'http://localhost:5173/',
     //API_URL: 'http://192.168.2.149:8080',
-    API_URL: 'http://api.ato-deckbuilder.com',
+    API_URL: 'https://api.ato-deckbuilder.com',
 }
 
 const oidcConfig = {
