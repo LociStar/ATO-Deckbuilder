@@ -30,29 +30,38 @@ export default function CardsLoader({charClass, secondaryCharClass, fixed_button
         setPage(0);
     }, [searchText.value]);
 
-    const fetchCards = async ({page, charClass, secondaryCharClass, size}: {
+    const fetchCards = async ({page, charClass, secondaryCharClass, size, signal}: {
         page: any,
         charClass: any,
         secondaryCharClass: any,
-        size: any
+        size: any,
+        signal: AbortSignal
     }) => {
         fetch(AppConfig.API_URL + `/card?page=${page}&size=${size}&searchQuery=${searchText.value}&charClass=${charClass}&secondaryCharClass=${secondaryCharClass}`,
             {
-                method: 'GET'
+                method: 'GET',
+                signal: signal
             }).then(response => response.json())
             .then(data => setCards(data));
     }
+
     useEffect(() => {
+        const abortController = new AbortController();
         try {
             fetchCards({
                 page: page,
                 charClass: charClass,
                 secondaryCharClass: secondaryCharClass,
-                size: fixed_buttons ? 25 : totalCardsOnScreen
+                size: fixed_buttons ? 25 : totalCardsOnScreen,
+                signal: abortController.signal
             }).then(r => r);
         } catch (error) {
             console.error('Error:', error);
         }
+
+        return () => {
+            abortController.abort();
+        };
     }, [page, charClass, secondaryCharClass, searchText.value, fixed_buttons]);
 
     return (
