@@ -32,4 +32,4 @@ jobs:
           docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }} ghcr.io
           docker build -t ghcr.io/locistar/ato-deckbuilder-web:${{ env.VERSION }} .
           docker push ghcr.io/locistar/ato-deckbuilder-web:${{ env.VERSION }}
-        if: env.PREV_VERSION != ${{ steps.version-bump.outputs.newTag }}
+        if: env.PREV_VERSION != ${{ env.newTag }}
