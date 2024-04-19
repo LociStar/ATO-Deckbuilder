@@ -36,7 +36,7 @@ export default function DecksView() {
     useEffect(() => {
         let charId = characterFilter === 'All' ? '' : characterFilter;
         let sortByLikesFirst = filter === 'likes';
-        fetch(AppConfig.API_URL + `/deck?size=10&page=${page}&charId=${charId}&sortByLikesFirst=${sortByLikesFirst}&ownedFilter=${ownedFilter}&userName=${auth.user? auth.user.profile.preferred_username: ""}`)
+        fetch(AppConfig.API_URL + `/deck?size=10&page=${page}&charId=${charId}&sortByLikesFirst=${sortByLikesFirst}&ownedFilter=${ownedFilter}&userName=${auth.user ? auth.user.profile.preferred_username : ""}`)
             .then(response => response.json())
             .then((data: PagedDeck) => {
                 setPages(data.pages)
