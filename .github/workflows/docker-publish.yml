@@ -1,29 +1,56 @@
-- name: Setup Node.js
-  uses: actions/setup-node@v3
-  with:
-    node-version: 16
+name: Docker
 
-- name: Install Dependencies
-  run: npm ci
+on:
+  push:
+    branches:
+      - master
 
-- name: Bump Version
-  id: bump
-  run: |
-    git config --local user.email "action@github.com"
-    git config --local user.name "GitHub Action"
-    COMMIT_MSG=$(git log --format=%B -n 1)
-    if [[ "$COMMIT_MSG" == *"#major"* ]]; then
-      VERSION_TYPE="major"
-    elif [[ "$COMMIT_MSG" == *"#minor"* ]]; then
-      VERSION_TYPE="minor"
-    else
-      VERSION_TYPE="patch"
-    fi
-    npm version $VERSION_TYPE -m "Bump version to %s [skip ci]"
-    echo "NEW_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-- name: Push changes
-  uses: ad-m/github-push-action@v0.6.0
-  with:
-    github_token: ${{ secrets.github_token }}
-    branch: ${{ github.ref }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version
+        id: package
+        run: |
+          echo "PREV_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Bump Version
+        id: bump
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          COMMIT_MSG=$(git log --format=%B -n 1)
+          if [[ "$COMMIT_MSG" == *"#major"* ]]; then
+            VERSION_TYPE="major"
+          elif [[ "$COMMIT_MSG" == *"#minor"* ]]; then
+            VERSION_TYPE="minor"
+          else
+            VERSION_TYPE="patch"
+          fi
+          npm version $VERSION_TYPE -m "Bump version to %s [skip ci]"
+          echo "NEW_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.github_token }}
+          branch: ${{ github.ref }}
+
+      - name: Build and push Docker image
+        run: |
+          docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }} ghcr.io
+          docker build -t ghcr.io/locistar/ato-deckbuilder-web:${{ env.VERSION }} .
+          docker push ghcr.io/locistar/ato-deckbuilder-web:${{ env.VERSION }}
+        if: env.PREV_VERSION != env.NEW_VERSION
