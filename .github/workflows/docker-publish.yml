@@ -28,9 +28,14 @@ jobs:
           major-wording:  '#major'
           patch-wording:  '#patch'
 
+      - name: Get version
+        id: package
+        run: |
+          echo NEW_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+
       - name: Build and push Docker image
         run: |
-          docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }} ghcr.io
-          docker build -t ghcr.io/locistar/ato-deckbuilder-web:${{ steps.version_bump.outputs.newTag }} .
-          docker push ghcr.io/locistar/ato-deckbuilder-web:${{ steps.version_bump.outputs.newTag }}
-        if: env.PREV_VERSION != ${{ steps.version_bump.outputs.newTag }}
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin ghcr.io
+          docker build -t ghcr.io/locistar/ato-deckbuilder-web:${{ env.NEW_VERSION }} .
+          docker push ghcr.io/locistar/ato-deckbuilder-web:${{ env.NEW_VERSION }}
+        if: env.PREV_VERSION != ${{ env.NEW_VERSION }}
