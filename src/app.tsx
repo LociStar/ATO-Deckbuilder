@@ -22,7 +22,7 @@ declare module '@mui/material/styles' {
     }
 }
 
-const theme = createTheme({
+const theme = responsiveFontSizes(createTheme({
     // palette: {
     //     background: {
     //         default: 'gray',
@@ -69,7 +69,7 @@ const theme = createTheme({
               `,
         },
     },
-});
+}));
 export function App() {
 
     useEffect(() => {

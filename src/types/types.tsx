@@ -8,6 +8,7 @@ export type Card = {
     rarity: Rarity;
     originalRarity: string;
     energyCost: number;
+    chapter: number;
 };
 
 export type Deck = {

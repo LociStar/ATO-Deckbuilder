@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import {useEffect, useState} from "preact/hooks";
 import {Card, Deck} from "../types/types";
-import CardComponent from "../components/CardComponent.tsx";
 import Typography from "@mui/material/Typography";
 import {calculate_deck_cost} from "../utils/utils.ts";
 import {MuiMarkdown} from 'mui-markdown';
@@ -29,6 +28,8 @@ import {useAuth} from "react-oidc-context";
 import {useSnackbar} from "notistack";
 import RenderOnAuthenticated from "../components/conditionals/RenderOnAuthenticated.tsx";
 import {useNavigate} from "react-router-dom";
+import SmallCardComponent from "../components/SmallCardComponent.tsx";
+import Grid from "@mui/material/Unstable_Grid2";
 
 export default function DeckDetailsView() {
     const [deck, setDeck] = useState<Deck>();
@@ -41,6 +42,8 @@ export default function DeckDetailsView() {
     const isMdScreenOrSmaller = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
     const {enqueueSnackbar} = useSnackbar();
     const navigate = useNavigate();
+    const [cardCount, setCardCount] = useState(0);
+    const [selectedChapter, setSelectedChapter] = useState(1);
 
     useEffect(() => {
         if (!deck || !auth.user) return;
@@ -56,8 +59,8 @@ export default function DeckDetailsView() {
 
     useEffect(() => {
         if (!deck?.cardList) return;
-        setDeckCost(calculate_deck_cost(deck!.cardList, cardCraftingModifier, cardUpgradingModifier));
-    }, [deck?.cardList, cardCraftingModifier, cardUpgradingModifier]);
+        setDeckCost(calculate_deck_cost(deck!.cardList.filter(value => value.chapter == selectedChapter), cardCraftingModifier, cardUpgradingModifier));
+    }, [deck?.cardList, cardCraftingModifier, cardUpgradingModifier, selectedChapter]);
 
     function sortCardsByRarity(data: Deck) {
         // sort cards by rarity 'Common', 'Uncommon', 'Rare', 'Epic', 'Mythic'
@@ -101,6 +104,9 @@ export default function DeckDetailsView() {
             .then(response => response.json())
             .then(data => {
                 setDeck(data);
+                // get count of chapters
+                setCardCount(Math.max(...data.cardList.map((card: Card) => card.chapter)));
+
                 // Sort the cards by filter
                 switch (filter) {
                     case 'rarity':
@@ -114,10 +120,6 @@ export default function DeckDetailsView() {
                 }
             });
     }, []);
-
-    function onCardClick() {
-    }
-
     function handleFilterChange(event: SelectChangeEvent<string>) {
         const target = event.target as HTMLSelectElement;
         setFilter(target.value);
@@ -163,7 +165,10 @@ export default function DeckDetailsView() {
     return (
         <Stack marginBottom={5} marginX={{md: 5, xs: 2}}>
             <Stack display="flex" justifyContent="space-between" alignItems="center" marginBottom={3}>
-                <Typography variant="h2" color='black'>
+                <Typography variant="h2" color='white'
+                            style={{
+                                textShadow: '-1px 0 black, 0 2px black, 1px 0 black, 0 -1px black'
+                            }}>
                     {deck?.title}
                 </Typography>
                 <Typography variant="h5" color='black'>
@@ -227,7 +232,7 @@ export default function DeckDetailsView() {
                     backdropFilter: 'blur(50px)',
                     backgroundColor: alpha('#000000', 0.5),
                     borderRadius: 3,
-                    padding: 2
+                    padding: 4
                 }}>
                 <List style={{flex: 1}}>
                     <Stack direction={{md: "row"}}>
@@ -273,22 +278,33 @@ export default function DeckDetailsView() {
                     <Typography variant="h5" marginTop={5} marginBottom={1}>
                         Blue Shards: {deckCost}
                     </Typography>
-                    <EnergyCostGraph cardList={deck?.cardList || []}/>
-                    <RarityGraph cardList={deck?.cardList || []}/>
+                    <EnergyCostGraph cardList={deck?.cardList.filter(value => value.chapter == selectedChapter) || []}/>
+                    <RarityGraph cardList={deck?.cardList.filter(value => value.chapter == selectedChapter) || []}/>
                 </List>
-                <Stack direction="column"
-                       width="100%" style={{flex: 6}}>
-                    {/* Adjust this value to control the width of the card list */}
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: isMdScreenOrSmaller ? 'repeat(auto-fit, minmax(100px, 1fr))' : 'repeat(auto-fit, minmax(200px, 1fr))',
-                        gridGap: '10px'
-                    }}>
-                        {deck && deck.cardList.map((card) => (
-                            <CardComponent card={card} onCardClick={onCardClick}/>
-                        ))}
-                    </div>
-                </Stack>
+                <Grid container columnSpacing={{xs: 1, sm: 2, md: 5}} rowSpacing={{xs: 2, sm: 2, md: 5}}
+                      style={{flex: 4}} width="100%" justifyContent="center">
+                    {Array.from({length: cardCount}, (_, i) => i + 1).map((chapter) => (
+                        <Grid xs={12} sm={6} xl={3} border={selectedChapter === chapter ? 1 : 0} borderRadius={3}
+                              key={"chapter_" + chapter} onClick={() => setSelectedChapter(chapter)}
+                              style={{cursor: 'pointer'}}
+                              sx={{
+                                  '&:hover': {
+                                      boxShadow: '0 0 10px rgba(0,0,0,0.5)', // Add this line
+                                  },
+                              }}>
+                            <Typography variant="h4" marginBottom={2} style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>Chapter {chapter}</Typography>
+                            <Stack direction="column" spacing={1}>
+                                {deck && deck.cardList.filter(value => value.chapter == chapter).map((card, index) => (
+                                    <SmallCardComponent card={card} key={chapter + "_" + card.id + "_" + index}/>
+                                ))}
+                            </Stack>
+                        </Grid>
+                    ))}
+                </Grid>
             </Stack>
         </Stack>
     );
