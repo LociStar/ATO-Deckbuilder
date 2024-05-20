@@ -24,7 +24,7 @@ export default function CardComponent({card, onCardClick}: {
                 setImageSrc(imageCache[card.id]);
                 setImageLoaded(true);
             } else {
-                const response = await fetch(AppConfig.API_URL + `/image/${card.id}`);
+                const response = await fetch(AppConfig.API_URL + `/card/image/${card.id}`);
                 const blob = await response.blob();
                 const objectURL = URL.createObjectURL(blob);
                 // Store the image URL in the cache
