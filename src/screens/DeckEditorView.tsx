@@ -7,11 +7,7 @@ import {
     DialogContentText,
     Divider,
     FormControl,
-    InputLabel,
-    ListItem,
-    ListItemButton,
-    ListItemText,
-    Select,
+    InputLabel, Select,
     Snackbar,
     Stack,
     Tab,
@@ -30,11 +26,11 @@ import {calculate_deck_cost} from "../utils/utils.ts";
 import {alpha} from "@mui/material/styles";
 import {EnergyCostGraph} from "../components/graphs/EnergyCostGraph.tsx";
 import {RarityGraph} from "../components/graphs/RarityGraph.tsx";
-import {FixedSizeList} from 'react-window';
 import {AppConfig} from "../config.ts";
 import {MuiMarkdown} from "mui-markdown";
 import {useNavigate} from "react-router-dom";
 import {enqueueSnackbar} from "notistack";
+import SmallCardComponent from "../components/SmallCardComponent.tsx";
 
 export default function DeckEditor() {
     const [title, setTitle] = useState('');
@@ -54,6 +50,7 @@ export default function DeckEditor() {
     const auth = useAuth();
     const navigate = useNavigate();
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+    const [selectedChapter, setSelectedChapter] = useState(0);
 
     const removeCard = (cardToRemove: Card) => {
         setCardList(oldList => {
@@ -104,8 +101,11 @@ export default function DeckEditor() {
     };
 
     const addCardToList = (card: Card) => {
-        setCardList(oldList => [...oldList, card]);
+        const cardCopy = {...card};
+        cardCopy.chapter = selectedChapter + 1;
+        setCardList(oldList => [...oldList, cardCopy]);
     };
+
 
     const handleClose = (_ignored: Event, reason?: string) => {
         if (reason === 'clickaway') {
@@ -167,6 +167,10 @@ export default function DeckEditor() {
     const handleCloseDeleteDialog = () => {
         setOpenDeleteDialog(false);
     };
+
+    function handleChapterChange(_event: Event, newValue: number) {
+        setSelectedChapter(newValue);
+    }
 
     return (
         <div>
@@ -238,26 +242,30 @@ export default function DeckEditor() {
                     <EnergyCostGraph cardList={cardList || []}/>
                     <RarityGraph cardList={cardList || []}/>
                 </Stack>
+                <Stack direction="row">
+                    <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+                        <Tabs value={selectedChapter} onChange={handleChapterChange} aria-label="basic tabs example">
+                            {Array.from({length: 4}, (_, i) => i + 1).map((chapter) => (
+                                <Tab label={"Chapter " + chapter}/>
+                            ))}
+                        </Tabs>
+                    </Box>
+                    {/*<IconButton onClick={onAddChapterClicked} disabled={chapterCount == 4}><AddIcon/></IconButton>*/}
+                </Stack>
                 <Typography variant="h5">Cards</Typography>
                 <Typography>Cost: {cardCost}</Typography>
                 <Grid container
                       spacing={2}>
                     <Grid xs={3} md={4}>
                         <Box>
-                            <FixedSizeList
-                                height={700}
-                                width='100%'
-                                itemSize={46}
-                                itemCount={cardList.length}
-                            >
-                                {({index, style}) => (
-                                    <ListItem style={style}>
-                                        <ListItemButton onClick={() => removeCard(cardList[index])}>
-                                            <ListItemText primary={cardList[index].name}/>
-                                        </ListItemButton>
-                                    </ListItem>
-                                )}
-                            </FixedSizeList>
+                            <Stack direction="column" spacing={1}>
+                                {cardList && cardList.filter(value => value.chapter == selectedChapter + 1).map((card, index) => (
+                                    <div onClick={() => removeCard(card)}>
+                                        <SmallCardComponent card={card}
+                                                            key={selectedChapter + "_" + card.id + "_" + index}/>
+                                    </div>
+                                ))}
+                            </Stack>
                         </Box>
                     </Grid>
                     <Grid xs={9} md={8}>

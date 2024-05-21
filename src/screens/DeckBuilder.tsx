@@ -5,9 +5,11 @@ import {
     Divider,
     FormControl,
     InputLabel,
-    ListItem, ListItemButton,
-    ListItemText, Select, Snackbar,
-    Stack, Tab, Tabs,
+    Select,
+    Snackbar,
+    Stack,
+    Tab,
+    Tabs,
     TextField
 } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
@@ -22,10 +24,10 @@ import {calculate_deck_cost} from "../utils/utils.ts";
 import {alpha} from "@mui/material/styles";
 import {EnergyCostGraph} from "../components/graphs/EnergyCostGraph.tsx";
 import {RarityGraph} from "../components/graphs/RarityGraph.tsx";
-import {FixedSizeList} from 'react-window';
 import {AppConfig} from "../config.ts";
 import {MuiMarkdown} from "mui-markdown";
 import {useNavigate} from "react-router-dom";
+import SmallCardComponent from "../components/SmallCardComponent.tsx";
 
 export default function DeckBuilder() {
     const [title, setTitle] = useState('');
@@ -44,6 +46,8 @@ export default function DeckBuilder() {
     const [openError, setOpenError] = useState(false);
     const auth = useAuth();
     const navigate = useNavigate();
+    const [selectedChapter, setSelectedChapter] = useState(0);
+    //const [chapterCount, setChapterCount] = useState(1);
 
     const removeCard = (cardToRemove: Card) => {
         setCardList(oldList => {
@@ -72,7 +76,9 @@ export default function DeckBuilder() {
     };
 
     const addCardToList = (card: Card) => {
-        setCardList(oldList => [...oldList, card]);
+        const cardCopy = {...card};
+        cardCopy.chapter = selectedChapter + 1;
+        setCardList(oldList => [...oldList, cardCopy]);
     };
 
     const handleClose = (_ignored: Event, reason?: string) => {
@@ -107,12 +113,23 @@ export default function DeckBuilder() {
                 return response.json();
             }).then(data => {
                 setOpen(true);
-                navigate('/deck/' + data);
+                console.log(data)
+                navigate('/deck/' + data.id);
             });
         } catch (error) {
+            console.log(error);
             setOpenError(true);
         }
     }
+
+    function handleChapterChange(_event: Event, newValue: number) {
+        setSelectedChapter(newValue);
+    }
+
+    // function onAddChapterClicked() {
+    //     if (chapterCount < 4)
+    //         setChapterCount(chapterCount + 1);
+    // }
 
     return (
         <div>
@@ -184,26 +201,32 @@ export default function DeckBuilder() {
                     <EnergyCostGraph cardList={cardList || []}/>
                     <RarityGraph cardList={cardList || []}/>
                 </Stack>
-                <Typography variant="h5">Cards</Typography>
+
+                <Stack direction="row">
+                    <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+                        <Tabs value={selectedChapter} onChange={handleChapterChange} aria-label="basic tabs example">
+                            {Array.from({length: 4}, (_, i) => i + 1).map((chapter) => (
+                                <Tab label={"Chapter " + chapter}/>
+                            ))}
+                        </Tabs>
+                    </Box>
+                    {/*<IconButton onClick={onAddChapterClicked} disabled={chapterCount == 4}><AddIcon/></IconButton>*/}
+                </Stack>
+
+                <Typography variant="h5">Cards of Chapter {selectedChapter + 1}</Typography>
                 <Typography>Cost: {cardCost}</Typography>
                 <Grid container
                       spacing={2}>
                     <Grid xs={3} md={4}>
                         <Box>
-                            <FixedSizeList
-                                height={700}
-                                width='100%'
-                                itemSize={46}
-                                itemCount={cardList.length}
-                            >
-                                {({index, style}) => (
-                                    <ListItem style={style}>
-                                        <ListItemButton onClick={() => removeCard(cardList[index])}>
-                                            <ListItemText primary={cardList[index].name}/>
-                                        </ListItemButton>
-                                    </ListItem>
-                                )}
-                            </FixedSizeList>
+                            <Stack direction="column" spacing={1}>
+                                {cardList && cardList.filter(value => value.chapter == selectedChapter + 1).map((card, index) => (
+                                    <div onClick={() => removeCard(card)}>
+                                        <SmallCardComponent card={card}
+                                                            key={selectedChapter + "_" + card.id + "_" + index}/>
+                                    </div>
+                                ))}
+                            </Stack>
                         </Box>
                     </Grid>
                     <Grid xs={9} md={8}>
