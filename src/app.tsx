@@ -1,7 +1,7 @@
 import './app.css'
 
 import {createTheme, CssBaseline, responsiveFontSizes, ThemeProvider} from "@mui/material";
-import backgroundImage from './assets/extended-town.webp';
+import backgroundImage from './assets/extended-town_.webp';
 import {useEffect} from "preact/hooks";
 import {SnackbarProvider} from 'notistack';
 import TemporaryDrawer from "./components/TemporaryDrawer.tsx";
