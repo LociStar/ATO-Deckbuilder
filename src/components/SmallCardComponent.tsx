@@ -26,7 +26,7 @@ export default function SmallCardComponent({card}: {
                 setImageSrc(imageCache[card.id]);
                 setImageLoaded(true);
             } else {
-                const response = await fetch(AppConfig.API_URL + "/card/sprite/" + card.name.replaceAll(' ', ""));
+                const response = await fetch(AppConfig.API_URL + "/card/sprite/" + card.id);
                 const blob = await response.blob();
                 const objectURL = URL.createObjectURL(blob);
                 // Store the image URL in the cache
