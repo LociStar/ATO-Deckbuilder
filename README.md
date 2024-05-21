@@ -2,17 +2,25 @@
 <html>
 <body>
     <a href="">
-        <img align="right" src="https://github.com/LociStar/ATO-Deckbuilder/blob/master/src/assets/LOGO-ATO.png?raw=true" height="220" width="220">
+        <img align="right" src="https://github.com/LociStar/ATO-Deckbuilder/blob/master/src/assets/LOGO_ATO.webp?raw=true" height="220" width="220">
     </a>
     <h1>ATO-Deckbuilder</h1>
     <p><b>A Deckbuilding Website for the game Across the Obelisk</b></p>
     <hr>
     <h2>INFO</h2>
     <p>This project is currently in active development and has not yet been released. Since I am a computer science student, I do not have much time available, but I am trying my best to work on this project.
-        I hope to finish the first version by 30.04.2024.</p>
+        I hope to finish the first version by 31.05.2024.</p>
     <hr>
     <h3>Disclaimer</h3>
     ATO-Deckbuilder is not affiliated with the game Across the Obelisk or Dreamsite Games. This is a fan-made project.
+    <hr>
+    <h3>Features</h3>
+    <li> User Authentication
+    <li> Deckbuilding -> Create, edit and delete decks for a character
+    <li> Card Database
+    <hr>
+    <h3>Planned Features</h3>
+    <li> Perk Builder (integrated with the deck building)
     <hr>
     <h2>Support</h2>
     <p>If you run into any issues or have questions, please create an issue on GitHub</p>
