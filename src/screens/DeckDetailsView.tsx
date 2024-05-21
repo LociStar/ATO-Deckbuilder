@@ -1,10 +1,8 @@
 import {
     Box,
     Button,
-    Divider,
     FormControl,
     InputLabel,
-    List,
     Select,
     SelectChangeEvent,
     Stack,
@@ -42,8 +40,8 @@ export default function DeckDetailsView() {
     const isMdScreenOrSmaller = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
     const {enqueueSnackbar} = useSnackbar();
     const navigate = useNavigate();
-    const [cardCount, setCardCount] = useState(0);
     const [selectedChapter, setSelectedChapter] = useState(1);
+    const [chapterCardCount, setChapterCardCount] = useState<{ [chapter: number]: number; } | undefined>();
 
     useEffect(() => {
         if (!deck || !auth.user) return;
@@ -104,8 +102,13 @@ export default function DeckDetailsView() {
             .then(response => response.json())
             .then(data => {
                 setDeck(data);
-                // get count of chapters
-                setCardCount(Math.max(...data.cardList.map((card: Card) => card.chapter)));
+                // get amount of cards for each chapter
+                const chapterCardCount = data.cardList.reduce((acc: { [chapter: number]: number }, card: Card) => {
+                    acc[card.chapter] = (acc[card.chapter] || 0) + 1;
+                    return acc;
+                }, {} as { [chapter: number]: number });
+                setChapterCardCount(chapterCardCount);
+                setSelectedChapter(Number(Object.keys(chapterCardCount)[0]) || 1);
 
                 // Sort the cards by filter
                 switch (filter) {
@@ -120,6 +123,7 @@ export default function DeckDetailsView() {
                 }
             });
     }, []);
+
     function handleFilterChange(event: SelectChangeEvent<string>) {
         const target = event.target as HTMLSelectElement;
         setFilter(target.value);
@@ -165,9 +169,9 @@ export default function DeckDetailsView() {
     return (
         <Stack marginBottom={5} marginX={{md: 5, xs: 2}}>
             <Stack display="flex" justifyContent="space-between" alignItems="center" marginBottom={3}>
-                <Typography variant="h2" color='white'
+                <Typography variant="h2" color='black'
                             style={{
-                                textShadow: '-1px 0 black, 0 2px black, 1px 0 black, 0 -1px black'
+                                textShadow: '-1px 0 white, 0 1px white, 1px 0 white, 0 -1px white'
                             }}>
                     {deck?.title}
                 </Typography>
@@ -176,7 +180,7 @@ export default function DeckDetailsView() {
                 </Typography>
                 <RenderOnAuthenticated>
                     {auth.user?.profile.preferred_username == deck?.username ?
-                        <Button color="primary"
+                        <Button color="error"
                                 style={{
                                     position: isMdScreenOrSmaller ? '' : 'absolute',
                                     right: isMdScreenOrSmaller ? '' : '1%',
@@ -222,20 +226,20 @@ export default function DeckDetailsView() {
                         </Stack>}
                 </Stack>
             </Stack>
-            <Divider variant="middle"/>
             <Stack
                 direction={{xs: 'column', sm: 'column', md: 'row'}}
                 marginTop={3}
                 display="flex"
+                alignSelf="center"
+                width="fit-content"
                 sx={{
-                    width: "100%",
                     backdropFilter: 'blur(50px)',
                     backgroundColor: alpha('#000000', 0.5),
                     borderRadius: 3,
                     padding: 4
                 }}>
-                <List style={{flex: 1}}>
-                    <Stack direction={{md: "row"}}>
+                <Stack marginRight={5} minWidth={300} maxWidth={500} marginBottom={{sm: 5, md: 0}}>
+                    <Stack>
                         <FormControl sx={{m: 1, minWidth: 120}} size="small">
                             <InputLabel id="sort-select-label">Sort by</InputLabel>
                             <Select
@@ -280,13 +284,15 @@ export default function DeckDetailsView() {
                     </Typography>
                     <EnergyCostGraph cardList={deck?.cardList.filter(value => value.chapter == selectedChapter) || []}/>
                     <RarityGraph cardList={deck?.cardList.filter(value => value.chapter == selectedChapter) || []}/>
-                </List>
-                <Grid container columnSpacing={{xs: 1, sm: 2, md: 5}} rowSpacing={{xs: 2, sm: 2, md: 5}}
-                      style={{flex: 4}} width="100%" justifyContent="center">
-                    {Array.from({length: cardCount}, (_, i) => i + 1).map((chapter) => (
-                        <Grid xs={12} sm={6} xl={3} border={selectedChapter === chapter ? 1 : 0} borderRadius={3}
-                              key={"chapter_" + chapter} onClick={() => setSelectedChapter(chapter)}
+                </Stack>
+                <Grid container columnSpacing={{xs: 1, sm: 2, md: 5}} rowSpacing={{xs: 2, sm: 2, md: 2}}
+                      justifyContent="center">
+                    {chapterCardCount && Object.keys(chapterCardCount).map((chapter) => (
+                        <Grid xs={12} sm={6} xl={3} border={selectedChapter === Number(chapter) ? 1 : 0}
+                              borderRadius={3}
+                              key={"chapter_" + chapter} onClick={() => setSelectedChapter(Number(chapter))}
                               style={{cursor: 'pointer'}}
+                              minWidth={400}
                               sx={{
                                   '&:hover': {
                                       boxShadow: '0 0 10px rgba(0,0,0,0.5)', // Add this line
@@ -297,8 +303,8 @@ export default function DeckDetailsView() {
                                 justifyContent: 'center',
                                 alignItems: 'center'
                             }}>Chapter {chapter}</Typography>
-                            <Stack direction="column" spacing={1}>
-                                {deck && deck.cardList.filter(value => value.chapter == chapter).map((card, index) => (
+                            <Stack direction="column" spacing={1} minWidth={350}>
+                                {deck && deck.cardList.filter(value => value.chapter == Number(chapter)).map((card, index) => (
                                     <SmallCardComponent card={card} key={chapter + "_" + card.id + "_" + index}/>
                                 ))}
                             </Stack>
