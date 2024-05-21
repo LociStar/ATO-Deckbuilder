@@ -21,6 +21,7 @@
     <hr>
     <h3>Planned Features</h3>
     <li> Perk Builder (integrated with the deck building)
+    <li> Login via Discord
     <hr>
     <h2>Support</h2>
     <p>If you run into any issues or have questions, please create an issue on GitHub</p>
