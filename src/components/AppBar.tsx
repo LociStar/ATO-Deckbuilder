@@ -83,7 +83,7 @@ export default function PrimarySearchAppBar() {
                 <MenuItem onClick={() => {
                     setAnchorEl(null);
                     return auth.signinRedirect()
-                }}>Log in</MenuItem>
+                }}>Login/Register</MenuItem>
             </RenderOnAnonymous>
         </Menu>
     );
@@ -124,7 +124,7 @@ export default function PrimarySearchAppBar() {
                     setAnchorEl(null);
                     handleMobileMenuClose();
                     return auth.signinRedirect()
-                }}>Log in</MenuItem>
+                }}>Login/Register</MenuItem>
             </RenderOnAnonymous>
         </Menu>
     );
