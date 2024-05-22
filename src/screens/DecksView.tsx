@@ -10,6 +10,8 @@ import {alpha} from "@mui/material/styles";
 import {useSnackbar} from "notistack";
 import {useAuth} from "react-oidc-context";
 import RenderOnAuthenticated from "../components/conditionals/RenderOnAuthenticated.tsx";
+import {useContext} from "preact/hooks";
+import {AppState} from "./ViewController.tsx";
 
 export default function DecksView() {
     const [decks, setDecks] = useState<Deck[]>([]);
@@ -23,6 +25,7 @@ export default function DecksView() {
     const navigate = useNavigate();
     const {enqueueSnackbar} = useSnackbar();
     const auth = useAuth();
+    const {searchText} = useContext(AppState);
 
     useEffect(() => {
         fetch(AppConfig.API_URL + '/character')
@@ -36,13 +39,13 @@ export default function DecksView() {
     useEffect(() => {
         let charId = characterFilter === 'All' ? '' : characterFilter;
         let sortByLikesFirst = filter === 'likes';
-        fetch(AppConfig.API_URL + `/deck?size=10&page=${page}&charId=${charId}&sortByLikesFirst=${sortByLikesFirst}&ownedFilter=${ownedFilter}&userName=${auth.user ? auth.user.profile.preferred_username : ""}`)
+        fetch(AppConfig.API_URL + `/deck?searchQuery=${searchText.value}&size=10&page=${page}&charId=${charId}&sortByLikesFirst=${sortByLikesFirst}&ownedFilter=${ownedFilter}&userName=${auth.user ? auth.user.profile.preferred_username : ""}`)
             .then(response => response.json())
             .then((data: PagedDeck) => {
                 setPages(data.pages)
                 setDecks(data.decks);
             });
-    }, [filter, characterFilter, page, ownedFilter]);
+    }, [filter, characterFilter, page, ownedFilter, searchText.value]);
 
     function onCardActionClick() {
         if (!auth.user) {
