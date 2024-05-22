@@ -79,7 +79,7 @@ export function App() {
             }
             const x = event.clientX;
             const width = window.innerWidth;
-            const percentage = ((x / width) * 4) - 2; // calculate percentage from -10% to 10%
+            const percentage = ((x / width) * 2) - 1; // calculate percentage from -5% to 5%
             const adjustedPercentage = 50 + percentage; // adjust the default position (50%) by the calculated percentage
             document.body.style.setProperty('--mouse-x', `${adjustedPercentage}%`);
         };
