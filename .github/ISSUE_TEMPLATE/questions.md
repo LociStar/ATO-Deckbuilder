@@ -1,5 +1,5 @@
 ---
-name: Questions teamplate
+name: Questions
 about: Questions about ato-deckbuilder (not a bug/feature)
 title: ''
 labels: new, question
