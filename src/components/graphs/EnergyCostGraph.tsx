@@ -21,7 +21,7 @@ export const EnergyCostGraph: React.FC<EnergyCostGraphProps> = ({cardList}) => {
             if (card.energyCost == 0)
                 acc[0]++;
             else if (card.energyCost >= 1 && card.energyCost <= 4) {
-                acc[card.energyCost - 1]++;
+                acc[card.energyCost]++;
             } else if (card.energyCost >= 5) {
                 acc[5]++;
             }
