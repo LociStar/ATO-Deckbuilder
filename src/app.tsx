@@ -46,7 +46,7 @@ const theme = responsiveFontSizes(createTheme({
         }
     },
     typography: {
-        fontFamily: ['Cantora One'].join(','),
+        fontFamily: 'Cantora One',
     },
     components: {
         MuiCssBaseline: {
