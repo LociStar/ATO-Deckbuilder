@@ -17,7 +17,7 @@ import {AppState} from "../screens/ViewController.tsx";
 import AppBar from '@mui/material/AppBar';
 import logo from "../assets/LOGO_ATO.webp";
 import {useNavigate} from "react-router-dom";
-import {Button} from "@mui/material";
+import {Button, Chip} from "@mui/material";
 
 
 export default function PrimarySearchAppBar() {
@@ -154,6 +154,7 @@ export default function PrimarySearchAppBar() {
                 </Button>
                 <CustomSearch/>
                 <Box sx={{flexGrow: 1}}/>
+                <Chip color="success" label="Game Version 1.4.1" variant="outlined" sx={{mr: 2}}/>
                 <Box sx={{display: {xs: 'none', md: 'flex'}}}>
                     <IconButton
                         size="large"
