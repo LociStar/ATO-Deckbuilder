@@ -9,6 +9,8 @@ import CardsView from "./CardsView.tsx";
 import TermsOfService from "./TermsOfServiceView.tsx";
 import PrivacyPolicy from "./PrivacyPolicyView.tsx";
 import DeckEditor from "./DeckEditorView.tsx";
+import PerksView from "./PerksView.tsx";
+import PerksDetailsView from "./PerksDetailsView.tsx";
 
 export const AppState = createContext(createAppState());
 
@@ -46,6 +48,14 @@ export default function ViewController() {
                 {
                     path: "/deckeditor/*",
                     element: <DeckEditor/>,
+                },
+                {
+                    path: "/perks",
+                    element: <PerksView/>,
+                },
+                {
+                    path: "/perks/*",
+                    element: <PerksDetailsView/>,
                 },
             ],
         },

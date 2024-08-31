@@ -33,10 +33,10 @@ export default function TemporaryDrawer() {
 
     const DrawerList = (
         <Box role="presentation" onClick={toggleDrawer(false)}>
-            <List>
+            <List sx={{mt: 2}}>
                 <ListItem>
                     <ListItemButton component={Link} to={'/'}>
-                        <ListItemText primary="Home"/>
+                        <ListItemText primary="Deck Guides"/>
                     </ListItemButton>
                 </ListItem>
                 <ListItem>
@@ -44,13 +44,24 @@ export default function TemporaryDrawer() {
                         <ListItemText primary="Deck Builder"/>
                     </ListItemButton>
                 </ListItem>
+                <Divider/>
+                <ListItem>
+                    <ListItemButton component={Link} to={'/perks'}>
+                        <ListItemText primary="Perks Guides"/>
+                    </ListItemButton>
+                </ListItem>
+                <ListItem>
+                    <ListItemButton component={Link} to={'/perks/-'}>
+                        <ListItemText primary="Perk Builder"/>
+                    </ListItemButton>
+                </ListItem>
+                <Divider/>
                 <ListItem>
                     <ListItemButton component={Link} to={'/cards-wiki'}>
                         <ListItemText primary="Cards Wiki"/>
                     </ListItemButton>
                 </ListItem>
             </List>
-            <Divider/>
             <List>
                 <ListItem>
                     <ListItemButton component={Link} to={'https://github.com/LociStar/ATO-Deckbuilder'}>

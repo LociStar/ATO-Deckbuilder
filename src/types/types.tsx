@@ -31,3 +31,14 @@ export type Character = {
     characterClass: string;
     secondaryCharacterClass: string;
 }
+
+export type Perks = {
+    id: number;
+    data: string;
+    title: string;
+};
+
+export type PagedPerks = {
+    perks: Perks[];
+    pages: number;
+}
