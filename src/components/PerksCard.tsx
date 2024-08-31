@@ -1,6 +1,5 @@
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
-import {useEffect} from "preact/hooks";
 import {Perks} from "../types/types.tsx";
 import {Button, Stack} from "@mui/material";
 import {useNavigate} from "react-router-dom";
@@ -14,10 +13,6 @@ export default function PerksCard({perks}: { perks: Perks }) {
     function onDeckCardClick() {
         return navigate('/perks/' + perks.id);
     }
-
-    useEffect(() => {
-        console.log(`Perks: ${perks.data}`)
-    }, [perks]);
 
     return (
         <Button onClick={onDeckCardClick}

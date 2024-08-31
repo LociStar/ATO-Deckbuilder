@@ -33,10 +33,12 @@ export default function PerksDetailsView() {
     useEffect(() => {
         if (perkId == "-") {
             setBuildMode(true);
-            const defaultPerk = {id: 0, title: "", data: ""};
-            setPerks(defaultPerk);
-            initializeSelectedPerks([]);
+            setPerks({id: 0, title: "", data: ""});
             perksList.value = [];
+            // reset selectedPerksSignals
+            Object.keys(selectedPerksSignals).forEach(key => {
+                selectedPerksSignals[key].value = false;
+            });
             return;
         }
         // if perkId is not a number
@@ -51,9 +53,7 @@ export default function PerksDetailsView() {
         fetch(AppConfig.API_URL + `/perks/${perkId}`)
             .then(response => response.json())
             .then((data: Perks) => {
-                console.log(data.data)
                 data.data = decompressString(data.data);
-                console.log(data.data)
                 setPerks(data);
                 perksList.value = data.data.split("_")[1].split('-');
                 initializeSelectedPerks(perksList.value);
