@@ -16,6 +16,7 @@ import Typography from "@mui/material/Typography";
 
 export default function PerksView() {
     const [perks, setPerks] = useState<Perks[]>([]);
+    // @ts-ignore
     const [filter, setFilter] = useState('likes');
     const [ownedFilter, setOwnedFilter] = useState<String>('All');
     const [pages, setPages] = useState(0);
