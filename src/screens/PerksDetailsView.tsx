@@ -33,6 +33,10 @@ export default function PerksDetailsView() {
     useEffect(() => {
         if (perkId == "-") {
             setBuildMode(true);
+            const defaultPerk = {id: 0, title: "", data: ""};
+            setPerks(defaultPerk);
+            initializeSelectedPerks([]);
+            perksList.value = [];
             return;
         }
         // if perkId is not a number
@@ -54,7 +58,7 @@ export default function PerksDetailsView() {
                 perksList.value = data.data.split("_")[1].split('-');
                 initializeSelectedPerks(perksList.value);
             });
-    }, []);
+    }, [window.location.pathname]);
 
     function decompressString(compressedText: string): string {
         let buffer = Uint8Array.from(atob(compressedText), c => c.charCodeAt(0));
