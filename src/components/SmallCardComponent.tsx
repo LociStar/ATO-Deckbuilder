@@ -1,43 +1,16 @@
-import {useEffect, useState} from "preact/hooks";
 import {Card} from "../types/types";
 import {AppConfig} from "../config.ts";
-import {Box, Stack, Theme, Tooltip, useMediaQuery, Zoom} from "@mui/material";
+import {Box, Stack, Tooltip, Zoom} from "@mui/material";
 import {alpha} from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import Skeleton from "@mui/material/Skeleton";
 import CardComponent from "./CardComponent.tsx";
-
-// Create a cache object outside the component
-const imageCache: { [key: string]: string } = {};
 
 export default function SmallCardComponent({card}: {
     card: Card
 }) {
-    const [imageSrc, setImageSrc] = useState<string>('');
-    const [imageLoaded, setImageLoaded] = useState(false);
-    const isMdScreenOrSmaller = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
-    const CARD_WIDTH = isMdScreenOrSmaller ? 100 : 200;
-    const CARD_HEIGHT = 450 * (CARD_WIDTH / 297)
-
-    useEffect(() => {
-        const fetchImage = async () => {
-            // Check if the image is in the cache
-            if (imageCache[card.id]) {
-                setImageSrc(imageCache[card.id]);
-                setImageLoaded(true);
-            } else {
-                const response = await fetch(AppConfig.API_URL + "/card/sprite/" + card.id);
-                const blob = await response.blob();
-                const objectURL = URL.createObjectURL(blob);
-                // Store the image URL in the cache
-                imageCache[card.id] = objectURL;
-                setImageSrc(objectURL);
-                setImageLoaded(true);
-            }
-        };
-
-        fetchImage().then(r => r);
-    }, [card.id]);
+    //const isMdScreenOrSmaller = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
+    //const CARD_WIDTH = isMdScreenOrSmaller ? 100 : 200;
+    //const CARD_HEIGHT = 450 * (CARD_WIDTH / 297)
 
     return (
         <Tooltip TransitionComponent={Zoom} placement="right-start" followCursor
@@ -74,9 +47,9 @@ export default function SmallCardComponent({card}: {
                                                 "#E17FFF" : "white"}
                     >{card.name}</Typography>
                 </Stack>
-                {!imageLoaded ? <Skeleton variant="rounded" animation="wave" width={CARD_WIDTH} height={CARD_HEIGHT}/> :
+                {/*<Skeleton variant="rounded" animation="wave" width={CARD_WIDTH} height={CARD_HEIGHT}/>*/}
                     <img
-                        src={imageSrc}
+                        src={AppConfig.API_URL + "/card/sprite/" + card.id}
                         alt={card.name.replaceAll(' ', "").toLowerCase()}
                         style={{
                             width: '60px',
@@ -84,7 +57,7 @@ export default function SmallCardComponent({card}: {
                             alignSelf: 'end',
 
                         }}
-                    />}
+                    />
             </Stack>
         </Tooltip>
     );
