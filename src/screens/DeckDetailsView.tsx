@@ -32,8 +32,8 @@ import Grid from "@mui/material/Unstable_Grid2";
 export default function DeckDetailsView() {
     const [deck, setDeck] = useState<Deck>();
     const [deckCost, setDeckCost] = useState(0);
-    const [cardCraftingModifier, setCardCraftingModifier] = useState(1);
-    const [cardUpgradingModifier, setCardUpgradingModifier] = useState(1);
+    const [cardCraftingModifier, setCardCraftingModifier] = useState(0.7);
+    const [cardUpgradingModifier, setCardUpgradingModifier] = useState(0.5);
     const [filter, setFilter] = useState('energy');
     const [isFav, setIsFav] = useState(false);
     const auth = useAuth();
@@ -42,6 +42,7 @@ export default function DeckDetailsView() {
     const navigate = useNavigate();
     const [selectedChapter, setSelectedChapter] = useState(1);
     const [chapterCardCount, setChapterCardCount] = useState<{ [chapter: number]: number; } | undefined>();
+    const [baseCardList, setBaseCardList] = useState<Card[]>([]);
 
     useEffect(() => {
         if (!deck || !auth.user) return;
@@ -56,9 +57,24 @@ export default function DeckDetailsView() {
     }, [auth, deck?.id]);
 
     useEffect(() => {
-        if (!deck?.cardList) return;
-        setDeckCost(calculate_deck_cost(deck!.cardList.filter(value => value.chapter == selectedChapter), cardCraftingModifier, cardUpgradingModifier));
-    }, [deck?.cardList, cardCraftingModifier, cardUpgradingModifier, selectedChapter]);
+        if (!deck?.cardList || !baseCardList) return;
+        setDeckCost(calculate_deck_cost(deck!.cardList.filter(value => value.chapter == selectedChapter), baseCardList, cardCraftingModifier, cardUpgradingModifier));
+    }, [deck?.cardList, cardCraftingModifier, cardUpgradingModifier, selectedChapter, baseCardList]);
+
+    useEffect(() => {
+        if (!deck) {
+            return;
+        }
+
+        fetch(AppConfig.API_URL + '/character/default/' + deck.characterId, {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setBaseCardList(data);
+            })
+    }, [deck]);
 
     function sortCardsByRarity(data: Deck) {
         // sort cards by rarity 'Common', 'Uncommon', 'Rare', 'Epic', 'Mythic'
@@ -261,8 +277,8 @@ export default function DeckDetailsView() {
                                 label="Craft Reduction"
                                 onChange={event => setCardCraftingModifier(Number((event.target as HTMLSelectElement).value))}>
                                 <MenuItem value={1}>No Reduction</MenuItem>
-                                <MenuItem value={0.15}>15%</MenuItem>
-                                <MenuItem value={0.3}>30%</MenuItem>
+                                <MenuItem value={0.85}>15% Reduction</MenuItem>
+                                <MenuItem value={0.7}>30% Reduction</MenuItem>
                             </Select>
                         </FormControl>
                         <FormControl sx={{m: 1, minWidth: 120}} size="small">
@@ -274,8 +290,9 @@ export default function DeckDetailsView() {
                                 label="Upgrade Reduction"
                                 onChange={event => setCardUpgradingModifier(Number((event.target as HTMLSelectElement).value))}>
                                 <MenuItem value={1}>No Reduction</MenuItem>
-                                <MenuItem value={0.15}>15%</MenuItem>
-                                <MenuItem value={0.3}>30%</MenuItem>
+                                <MenuItem value={0.85}>15% Reduction</MenuItem>
+                                <MenuItem value={0.7}>30% Reduction</MenuItem>
+                                <MenuItem value={0.5}>50% Reduction</MenuItem>
                             </Select>
                         </FormControl>
                     </Stack>

@@ -38,15 +38,16 @@ export default function DeckBuilder() {
     const [chars, setChars] = useState<Character[]>([]);
     const [cardCost, setCardCost] = useState(0);
     // @ts-ignore
-    const [cardCraftingModifier, setCardCraftingModifier] = useState(1);
+    const [cardCraftingModifier, setCardCraftingModifier] = useState(0.7);
     // @ts-ignore
-    const [cardUpgradingModifier, setCardUpgradingModifier] = useState(1);
+    const [cardUpgradingModifier, setCardUpgradingModifier] = useState(0.5);
     const [tabValue, setTabValue] = useState(0);
     const [open, setOpen] = useState(false);
     const [openError, setOpenError] = useState(false);
     const auth = useAuth();
     const navigate = useNavigate();
     const [selectedChapter, setSelectedChapter] = useState(0);
+    const [baseCardList, setBaseCardList] = useState<Card[]>([]);
     //const [chapterCount, setChapterCount] = useState(1);
 
     const removeCard = (cardToRemove: Card) => {
@@ -60,8 +61,8 @@ export default function DeckBuilder() {
     };
 
     useEffect(() => {
-        setCardCost(calculate_deck_cost(cardList, cardCraftingModifier, cardUpgradingModifier));
-    }, [cardList, cardCraftingModifier, cardUpgradingModifier]);
+        setCardCost(calculate_deck_cost(cardList, baseCardList, cardCraftingModifier, cardUpgradingModifier));
+    }, [cardList, cardCraftingModifier, cardUpgradingModifier, baseCardList]);
 
     useEffect(() => {
         fetch(AppConfig.API_URL + '/character', {
@@ -70,6 +71,32 @@ export default function DeckBuilder() {
             .then(response => response.json())
             .then(data => setChars(data));
     }, []);
+
+    useEffect(() => {
+        if (!selectedCharacter) {
+            return;
+        }
+
+        fetch(AppConfig.API_URL + '/character/default/' + selectedCharacter, {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setBaseCardList(data);
+                if (cardList.length === 0 || sameCardIds(cardList, baseCardList)) {
+                    setCardList([]);
+                    data.forEach((card: Card) => addCardToList(card));
+                }
+            })
+    }, [selectedCharacter]);
+
+    function sameCardIds(cardList1: Card[], cardList2: Card[]): boolean {
+        if (cardList1.length !== cardList2.length) {
+            return false;
+        }
+        return cardList1.every((card, index) => card.id === cardList2[index].id);
+    }
 
     const handleTabChange = (_ignored: Event, newValue: number) => {
         setTabValue(newValue);
@@ -214,7 +241,7 @@ export default function DeckBuilder() {
                 </Stack>
 
                 <Typography variant="h5">Cards of Chapter {selectedChapter + 1}</Typography>
-                <Typography>Cost: {cardCost}</Typography>
+                <Typography>Blue Shards: {cardCost}</Typography>
                 <Grid container
                       spacing={2}>
                     <Grid xs={3} md={4}>
