@@ -66,7 +66,13 @@ export default function SmallCardComponent({card}: {
                             {card.energyCost}
                         </p>
                     </Stack>
-                    <Typography variant="h5">{card.name}</Typography>
+                    <Typography variant="h5"
+                                color={
+                                    card.version.trim() == "A" ? "#67C0F4" :
+                                        card.version.trim() == "B" ? "#FFCA41" :
+                                            card.version.trim() == "Rare" ?
+                                                "#E17FFF" : "white"}
+                    >{card.name}</Typography>
                 </Stack>
                 {!imageLoaded ? <Skeleton variant="rounded" animation="wave" width={CARD_WIDTH} height={CARD_HEIGHT}/> :
                     <img
