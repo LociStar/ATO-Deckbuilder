@@ -51,7 +51,7 @@
     {"id": "1_4_2", "empty": true},
     {"id": "1_4_3", "empty": true},
     {
-      "id": "mainperksight1",
+      "id": "basesight1",
       "src1": "sight",
       "src2": "final",
       "specialCase": ["mainperksight1a", "mainperksight1b", "mainperksight1c"]
@@ -65,7 +65,7 @@
     {"id": "mainperkresistance4", "src1": "ui_resistance", "src2": "silver"},
     {"id": "mainperkcurrency4", "src1": "gold", "src2": "silver"},
     {"id": "mainperkshards4", "src1": "dust", "src2": "silver"},
-    {"id": "mainperkspeed4", "src1": "fast", "src2": "gold"},
+    {"id": "mainperkfast0", "src1": "fast", "src2": "gold"},
     {"id": "1_5_0", "empty": true},
     {"id": "mainperkslow0", "src1": "slow", "src2": "gold"},
     {"id": "mainperkenergy1", "src1": "energy", "src2": "gold"},
@@ -97,21 +97,21 @@
     {"id": "1_7_3", "empty": true},
     {"id": "1_7_4", "empty": true},
     {
-      "id": "mainperkenergy2",
+      "id": "baseenergy2",
       "src1": "energy",
       "src2": "final",
       "specialCase": ["mainperkenergy2a", "mainperkenergy2b", "mainperkenergy2c"]
     },
     {"id": "1_7_5", "empty": true},
     {
-      "id": "mainperkmark1",
+      "id": "basemark1",
       "src1": "mark",
       "src2": "final",
       "specialCase": ["mainperkmark1a", "mainperkmark1b", "mainperkmark1c"]
     },
     {"id": "1_7_6", "empty": true},
     {
-      "id": "mainperkstealth1",
+      "id": "basestealth1",
       "src1": "stealth",
       "src2": "final",
       "specialCase": ["mainperkstealth1a", "mainperkstealth1b", "mainperkstealth1c"]
@@ -157,7 +157,7 @@
     {"id":  "mainperkblunt1", "src1": "blunt", "src2": "silver"},
     {"id": "2_3_3", "empty": true},
     {"id":  "mainperkblock2", "src1": "block", "src2": "gold"},
-    {"id":  "mainperkreinforce2", "src1": "reinforce", "src2": "gold"}
+    {"id":  "mainperkreinforce0", "src1": "reinforce", "src2": "gold"}
   ],
   "page_2_level_4":[
     {"id": "2_4_0", "empty": true},
@@ -169,7 +169,7 @@
     {"id": "2_4_4", "empty": true},
     {"id":  "mainperkcrack1", "src1": "crack", "src2": "silver"},
     {"id": "2_4_5", "empty": true},
-    {"id":  "mainperkvulnerable0", "src1": "vulnerable", "src2": "final", "specialCase": ["mainperkvulnerable0a", "mainperkvulnerable0b", "mainperkvulnerable0c"]},
+    {"id":  "basevulnerable0", "src1": "vulnerable", "src2": "final", "specialCase": ["mainperkvulnerable0a", "mainperkvulnerable0b", "mainperkvulnerable0c"]},
     {"id":  "mainperkblock3", "src1": "block", "src2": "silver"},
     {"id": "2_4_6", "empty": true}
   ],
@@ -185,35 +185,35 @@
     {"id":  "mainperkblunt2", "src1": "blunt", "src2": "gold"},
     {"id":  "mainperkfortify0", "src1": "fortify", "src2": "silver"},
     {"id":  "mainperkblock4", "src1": "block", "src2": "silver"},
-    {"id":  "mainperkreinforce1", "src1": "reinforce", "src2": "final", "specialCase": ["mainperkreinforce1a", "mainperkreinforce1b", "mainperkreinforce1c"]}
+    {"id":  "basereinforce1", "src1": "reinforce", "src2": "final", "specialCase": ["mainperkreinforce1a", "mainperkreinforce1b", "mainperkreinforce1c"]}
   ],
   "page_2_level_6":[
     {"id": "2_6_0", "empty": true},
-    {"id":  "mainperkbleed2", "src1": "bleed", "src2": "final", "specialCase": ["mainperkbleed2a", "mainperkbleed2b", "mainperkbleed2c"] },
+    {"id":  "basebleed2", "src1": "bleed", "src2": "final", "specialCase": ["mainperkbleed2a", "mainperkbleed2b", "mainperkbleed2c"] },
     {"id": "2_6_1", "empty": true},
     {"id": "2_6_2", "empty": true},
-    {"id":  "mainperkpoison2", "src1": "poison", "src2": "final", "specialCase": ["mainperkpoison2a", "mainperkpoison2b", "mainperkpoison2c"] },
+    {"id":  "basepoison2", "src1": "poison", "src2": "final", "specialCase": ["mainperkpoison2a", "mainperkpoison2b", "mainperkpoison2c"] },
     {"id": "2_6_3", "empty": true},
     {"id": "2_6_4", "empty": true},
-    {"id":  "mainperkcrack2", "src1": "crack", "src2": "silver", "specialCase": ["mainperkcrack2a", "mainperkcrack2b", "mainperkcrack2c"] },
+    {"id":  "basecrack2", "src1": "crack", "src2": "silver", "specialCase": ["mainperkcrack2a", "mainperkcrack2b", "mainperkcrack2c"] },
     {"id": "2_6_5", "empty": true},
     {"id": "2_6_6", "empty": true},
     {"id":  "mainperkblock5", "src1": "block", "src2": "gold"},
     {"id":  "mainperktaunt0", "src1": "taunt", "src2": "silver"}
   ],
   "page_2_level_7":[
-    {"id":  "mainperkfury1", "src1": "fury", "src2": "final", "specialCase":  ["mainperkfury1a", "mainperkfury1b", "mainperkfury1c"]},
+    {"id":  "basefury1", "src1": "fury", "src2": "final", "specialCase":  ["mainperkfury1a", "mainperkfury1b", "mainperkfury1c"]},
     {"id": "2_7_0", "empty": true},
     {"id": "2_7_1", "empty": true},
-    {"id":  "mainperksharp1", "src1": "sharp", "src2": "final", "specialCase": ["mainperksharp1a", "mainperksharp1b", "mainperksharp1c", "mainperksharp1d"]},
+    {"id":  "basesharp1", "src1": "sharp", "src2": "final", "specialCase": ["mainperksharp1a", "mainperksharp1b", "mainperksharp1c", "mainperksharp1d"]},
     {"id": "2_7_2", "empty": true},
     {"id": "2_7_3", "empty": true},
-    {"id":  "mainperkthorns1", "src1": "thorns", "src2": "final", "specialCase":  ["mainperkthorns1a", "mainperkthorns1b", "mainperkthorns1c"]},
+    {"id":  "basethorns1", "src1": "thorns", "src2": "final", "specialCase":  ["mainperkthorns1a", "mainperkthorns1b", "mainperkthorns1c"]},
     {"id": "2_7_4", "empty": true},
     {"id": "2_7_5", "empty": true},
-    {"id":  "mainperkfortify1", "src1": "fortify", "src2": "final", "specialCase":  ["mainperkfortify1a", "mainperkfortify1b", "mainperkfortify1c"]},
+    {"id":  "basefortify1", "src1": "fortify", "src2": "final", "specialCase":  ["mainperkfortify1a", "mainperkfortify1b", "mainperkfortify1c"]},
     {"id": "2_7_6", "empty": true},
-    {"id":  "mainperktaunt1", "src1": "taunt", "src2": "final", "specialCase": ["mainperktaunt1a", "mainperktaunt1b", "mainperktaunt1c"]}
+    {"id":  "basetaunt1", "src1": "taunt", "src2": "final", "specialCase": ["mainperktaunt1a", "mainperktaunt1b", "mainperktaunt1c"]}
   ],
   "page_3_level_1": [
     {"id": "3_1_0", "empty": true},
@@ -283,33 +283,33 @@
     {"id": "mainperklightning2", "src1": "lightning", "src2": "gold"},
     {"id": "3_5_6", "empty": true},
     {"id": "mainperkshield4", "src1": "shield", "src2": "silver"},
-    {"id": "mainperkinsulate1", "src1": "insulate", "src2": "final", "specialCase":  ["mainperkinsulate1a", "mainperkinsulate1b", "mainperkinsulate1c"]}
+    {"id": "baseinsulate1", "src1": "insulate", "src2": "final", "specialCase":  ["mainperkinsulate1a", "mainperkinsulate1b", "mainperkinsulate1c"]}
   ],
   "page_3_level_6": [
     {"id": "3_6_0", "empty": true},
-    {"id":  "mainperkburn2", "src1": "burn", "src2": "final", "specialCase":  ["mainperkburn2a", "mainperkburn2b", "mainperkburn2c", "mainperkburn2d"]},
+    {"id":  "baseurn2", "src1": "burn", "src2": "final", "specialCase":  ["mainperkburn2a", "mainperkburn2b", "mainperkburn2c", "mainperkburn2d"]},
     {"id": "3_6_1", "empty": true},
     {"id": "3_6_2", "empty": true},
-    {"id":  "mainperkchill2", "src1": "chill", "src2": "final", "specialCase":  ["mainperkchill2a", "mainperkchill2b", "mainperkchill2c", "mainperkchill2d"]},
+    {"id":  "basechill2", "src1": "chill", "src2": "final", "specialCase":  ["mainperkchill2a", "mainperkchill2b", "mainperkchill2c", "mainperkchill2d"]},
     {"id": "3_6_3", "empty": true},
     {"id": "3_6_4", "empty": true},
-    {"id":  "mainperkspark2", "src1": "spark", "src2": "final", "specialCase":  ["mainperkspark2a", "mainperkspark2b", "mainperkspark2c"]},
+    {"id":  "basespark2", "src1": "spark", "src2": "final", "specialCase":  ["mainperkspark2a", "mainperkspark2b", "mainperkspark2c"]},
     {"id": "3_6_5", "empty": true},
     {"id": "3_6_6", "empty": true},
     {"id": "mainperkshield5", "src1": "shield", "src2": "gold"},
     {"id": "3_6_7", "empty": true}
   ],
   "page_3_level_7": [
-    {"id": "mainperkpowerful1", "src1": "powerful", "src2": "final", "specialCase": ["mainperkpowerful1a", "mainperkpowerful1b", "mainperkpowerful1c"]},
+    {"id": "basepowerful1", "src1": "powerful", "src2": "final", "specialCase": ["mainperkpowerful1a", "mainperkpowerful1b", "mainperkpowerful1c"]},
     {"id": "3_7_0", "empty": true},
     {"id": "3_7_1", "empty": true},
     {"id": "3_7_2", "empty": true},
     {"id": "3_7_3", "empty": true},
     {"id": "3_7_4", "empty": true},
-    {"id": "mainperkwet1", "src1": "wet", "src2": "final", "specialCase":  ["mainperkwet1a", "mainperkwet1b", "mainperkwet1c"]},
+    {"id": "basewet1", "src1": "wet", "src2": "final", "specialCase":  ["mainperkwet1a", "mainperkwet1b", "mainperkwet1c"]},
     {"id": "3_7_5", "empty": true},
     {"id": "3_7_6", "empty": true},
-    {"id": "mainperkinspire0", "src1": "inspire", "src2": "final", "specialCase":  ["mainperkinspire0a", "mainperkinspire0b", "mainperkinspire0c"]},
+    {"id": "baseinspire0", "src1": "inspire", "src2": "final", "specialCase":  ["mainperkinspire0a", "mainperkinspire0b", "mainperkinspire0c"]},
     {"id": "3_7_7", "empty": true},
     {"id": "3_7_8", "empty": true}
   ],
@@ -351,7 +351,7 @@
     {"id": "mainperkregeneration0", "src1": "regeneration", "src2": "silver"},
     {"id": "4_3_2", "empty": true},
     {"id": "mainperkmind1", "src1": "mind", "src2": "silver"},
-    {"id": "mainperkstanza0", "src1": "stanzai", "src2": "final", "specialCase": ["mainperkstanza0a", "mainperkstanza0b", "mainperkstanza0c"] },
+    {"id": "basestanza0", "src1": "stanzai", "src2": "final", "specialCase": ["mainperkstanza0a", "mainperkstanza0b", "mainperkstanza0c"] },
     {"id": "mainperkheal2", "src1": "heal", "src2": "gold"},
     {"id": "mainperkcourage0", "src1": "courage", "src2": "gold"}
   ],
@@ -381,33 +381,33 @@
     {"id": "mainperkmind2", "src1": "mind", "src2": "gold"},
     {"id": "mainperkbless0", "src1": "bless", "src2": "silver"},
     {"id": "mainperkheal4", "src1": "heal", "src2": "silver"},
-    {"id": "mainperkcourage1", "src1": "courage", "src2": "final", "specialCase":  ["mainperkcourage1a", "mainperkcourage1b", "mainperkcourage1c"]}
+    {"id": "basecourage1", "src1": "courage", "src2": "final", "specialCase":  ["mainperkcourage1a", "mainperkcourage1b", "mainperkcourage1c"]}
   ],
   "page_4_level_6": [
     {"id": "4_6_0", "empty": true},
-    {"id": "mainperksanctify2", "src1": "sanctify", "src2": "final", "specialCase":  ["mainperksanctify2a", "mainperksanctify2b", "mainperksanctify2c"]},
+    {"id": "basesanctify2", "src1": "sanctify", "src2": "final", "specialCase":  ["mainperksanctify2a", "mainperksanctify2b", "mainperksanctify2c"]},
     {"id": "4_6_1", "empty": true},
     {"id": "4_6_2", "empty": true},
-    {"id": "mainperkdark2", "src1": "dark", "src2": "final", "specialCase":  ["mainperkdark2a", "mainperkdark2b", "mainperkdark2c", "mainperkdark2d"]},
+    {"id": "basedark2", "src1": "dark", "src2": "final", "specialCase":  ["mainperkdark2a", "mainperkdark2b", "mainperkdark2c", "mainperkdark2d"]},
     {"id": "4_6_3", "empty": true},
     {"id": "4_6_4", "empty": true},
-    {"id": "mainperkinsane2", "src1": "insane", "src2": "final", "specialCase":  ["mainperkinsane2a", "mainperkinsane2b", "mainperkinsane2c"]},
+    {"id": "baseinsane2", "src1": "insane", "src2": "final", "specialCase":  ["mainperkinsane2a", "mainperkinsane2b", "mainperkinsane2c"]},
     {"id": "4_6_5", "empty": true},
     {"id": "4_6_6", "empty": true},
     {"id": "mainperkheal5", "src1": "heal", "src2": "gold"},
     {"id": "4_6_7", "empty": true}
   ],
   "page_4_level_7": [
-    {"id": "mainperkvitality1", "src1": "vitality", "src2": "final", "specialCase": ["mainperkvitality1a", "mainperkvitality1b", "mainperkvitality1c"]},
+    {"id": "basevitality1", "src1": "vitality", "src2": "final", "specialCase": ["mainperkvitality1a", "mainperkvitality1b", "mainperkvitality1c"]},
     {"id": "4_7_0", "empty": true},
     {"id": "4_7_1", "empty": true},
-    {"id": "mainperkdecay1", "src1": "decay", "src2": "final", "specialCase": ["mainperkdecay1a", "mainperkdecay1b", "mainperkdecay1c"]},
+    {"id": "basedecay1", "src1": "decay", "src2": "final", "specialCase": ["mainperkdecay1a", "mainperkdecay1b", "mainperkdecay1c"]},
     {"id": "4_7_3", "empty": true},
     {"id": "4_7_4", "empty": true},
-    {"id": "mainperkregeneration1", "src1": "regeneration", "src2": "final", "specialCase":  ["mainperkregeneration1a", "mainperkregeneration1b", "mainperkregeneration1c"]},
+    {"id": "baseregeneration1", "src1": "regeneration", "src2": "final", "specialCase":  ["mainperkregeneration1a", "mainperkregeneration1b", "mainperkregeneration1c"]},
     {"id": "4_7_5", "empty": true},
     {"id": "4_7_6", "empty": true},
-    {"id": "mainperkbless1", "src1": "bless", "src2": "final", "specialCase":  ["mainperkbless0a", "mainperkbless0b", "mainperkbless0c"]},
+    {"id": "basebless1", "src1": "bless", "src2": "final", "specialCase":  ["mainperkbless1a", "mainperkbless1b", "mainperkbless1c"]},
     {"id": "4_7_7", "empty": true},
     {"id": "4_7_8", "empty": true}
   ]
