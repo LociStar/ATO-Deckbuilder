@@ -175,7 +175,8 @@ export function ImagePair({
                                      }}
                                      display="flex">
                                     {!empty && (<>
-                                        <img src={AppConfig.API_URL + '/perks/image/' + perkDetailsSpecial[index]?.icon} alt="image1"
+                                        <img src={AppConfig.API_URL + '/perks/image/' + perkDetailsSpecial[index]?.icon}
+                                             alt="image1"
                                              style={{
                                                  width: '60%',
                                                  height: '60%',
