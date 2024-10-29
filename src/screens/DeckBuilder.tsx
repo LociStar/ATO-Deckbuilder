@@ -82,7 +82,6 @@ export default function DeckBuilder() {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 setBaseCardList(data);
                 if (cardList.length === 0 || sameCardIds(cardList, baseCardList)) {
                     setCardList([]);
