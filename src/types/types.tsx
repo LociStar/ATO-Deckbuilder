@@ -42,3 +42,27 @@ export type PagedPerks = {
     perks: Perks[];
     pages: number;
 }
+
+export type PerkDetails = {
+    id: number;
+    additionalCurrency: number;
+    additionalShards: number;
+    auraCurseBonus: string;
+    auraCurseBonusValue: number;
+    cardClass: string;
+    customDescription: string;
+    damageFlatBonus: string;
+    damageFlatBonusValue: number;
+    energyBegin: number;
+    healQuantity: number;
+    icon: string;
+    iconTextValue: string;
+    level: number;
+    mainPerk: boolean;
+    maxHealth: number;
+    obeliskPerk: boolean;
+    resistModified: string;
+    resistModifiedValue: number;
+    row: number;
+    speedQuantity: number;
+};
