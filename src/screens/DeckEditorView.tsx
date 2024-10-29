@@ -41,9 +41,9 @@ export default function DeckEditor() {
     const [chars, setChars] = useState<Character[]>([]);
     const [cardCost, setCardCost] = useState(0);
     // @ts-ignore
-    const [cardCraftingModifier, setCardCraftingModifier] = useState(1);
+    const [cardCraftingModifier, setCardCraftingModifier] = useState(0.7);
     // @ts-ignore
-    const [cardUpgradingModifier, setCardUpgradingModifier] = useState(1);
+    const [cardUpgradingModifier, setCardUpgradingModifier] = useState(0.5);
     const [tabValue, setTabValue] = useState(0);
     const [open, setOpen] = useState(false);
     const [openError, setOpenError] = useState(false);
@@ -51,6 +51,7 @@ export default function DeckEditor() {
     const navigate = useNavigate();
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [selectedChapter, setSelectedChapter] = useState(0);
+    const [baseCardList, setBaseCardList] = useState<Card[]>([]);
 
     const removeCard = (cardToRemove: Card) => {
         setCardList(oldList => {
@@ -63,8 +64,8 @@ export default function DeckEditor() {
     };
 
     useEffect(() => {
-        setCardCost(calculate_deck_cost(cardList, cardCraftingModifier, cardUpgradingModifier));
-    }, [cardList, cardCraftingModifier, cardUpgradingModifier]);
+        setCardCost(calculate_deck_cost(cardList, baseCardList, cardCraftingModifier, cardUpgradingModifier));
+    }, [cardList, cardCraftingModifier, cardUpgradingModifier, baseCardList]);
 
     useEffect(() => {
         fetch(AppConfig.API_URL + '/character', {
@@ -95,6 +96,31 @@ export default function DeckEditor() {
                 setSelectedCharacter(data.characterId);
             });
     }, []);
+
+    useEffect(() => {
+        if (!selectedCharacter) {
+            return;
+        }
+
+        fetch(AppConfig.API_URL + '/character/default/' + selectedCharacter, {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                setBaseCardList(data);
+                if (cardList.length === 0 || sameCardIds(cardList, baseCardList)) {
+                    setCardList([]);
+                    data.forEach((card: Card) => addCardToList(card));
+                }
+            })
+    }, [selectedCharacter]);
+
+    function sameCardIds(cardList1: Card[], cardList2: Card[]): boolean {
+        if (cardList1.length !== cardList2.length) {
+            return false;
+        }
+        return cardList1.every((card, index) => card.id === cardList2[index].id);
+    }
 
     const handleTabChange = (_ignored: Event, newValue: number) => {
         setTabValue(newValue);
