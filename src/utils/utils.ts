@@ -25,11 +25,10 @@ export function calculate_deck_cost(
 
     cardList.forEach(card => {
         // Determine if this card is an upgrade of a base card
-        const baseCardId = card.id.replace(/[ab]$/, ''); // remove "a" or "b" if present
+        const baseCardId = (card.version != "No\n") ? card.id.replace(/[ab]$/, '') : card.id; // remove "a" or "b" if present
         const baseCardCount = baseCardCounts[baseCardId] || 0;
 
         if (baseCardCount > 0) {
-            console.log(card.id);
             // Subtract base card cost if there are remaining base cards for this ID
             const baseCardCost = costMap[card.rarity];
             totalCost -= Math.round(baseCardCost * cardCraftingModifier);
