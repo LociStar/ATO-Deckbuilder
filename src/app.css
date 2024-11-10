@@ -70,3 +70,15 @@
 .zoomEffect:active {
     opacity: 0.5;
 }
+
+/* PerkGrid.css */
+.perk-grid-container {
+    position: relative;
+}
+
+.perk-grid-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
