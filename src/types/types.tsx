@@ -32,14 +32,14 @@ export type Character = {
     secondaryCharacterClass: string;
 }
 
-export type Perks = {
+export type UserPerk = {
     id: number;
     data: string;
     title: string;
 };
 
 export type PagedPerks = {
-    perks: Perks[];
+    perks: UserPerk[];
     pages: number;
 }
 
@@ -65,4 +65,18 @@ export type PerkDetails = {
     resistModifiedValue: number;
     row: number;
     speedQuantity: number;
+};
+
+export type PerkNodeProps = {
+    id: string;
+    column: number;
+    cost: string;
+    lockedInTown: boolean;
+    noStack: boolean;
+    perk: string;
+    perkRequired: string;
+    perksConnected: string[];
+    row: number;
+    sprite: string;
+    type: number;
 };
