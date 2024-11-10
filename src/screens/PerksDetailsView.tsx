@@ -1,5 +1,18 @@
 // src/screens/PerksDetailsView.tsx
-import {Box, Button, Dialog, Input, Stack, Tab, Tabs, TextField, Typography, useMediaQuery} from "@mui/material";
+import {
+    Box,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContentText,
+    Input,
+    Stack,
+    Tab,
+    Tabs,
+    TextField,
+    Typography,
+    useMediaQuery
+} from "@mui/material";
 import {alpha} from "@mui/material/styles";
 import {AppConfig} from "../config.ts";
 import {PerkNodeProps, UserPerk} from "../types/types.tsx";
@@ -12,6 +25,7 @@ import {TargetedEvent} from "react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {enqueueSnackbar} from "notistack";
 import pako from "pako";
+import RenderOnAuthenticated from "../components/conditionals/RenderOnAuthenticated.tsx";
 
 export default function PerksDetailsView() {
     const perkId = window.location.pathname.split("/").pop();
@@ -27,7 +41,8 @@ export default function PerksDetailsView() {
     const isMobile = useMediaQuery('(max-width:600px)');
     const selectedPerksRecord = useSignal<Record<string, Signal<boolean>>>({});
     const tabIndex = useSignal<number>(0);
-
+    const showDeleteDialog = useSignal(false);
+    const editMode = useSignal<boolean>(false)
 
     useEffect(() => {
         fetch(AppConfig.API_URL + `/perks/main/all`)
@@ -49,6 +64,7 @@ export default function PerksDetailsView() {
         if (perkNodes?.length === 0) return;
         if (perkId == "-") {
             isBuildMode.value = true;
+            editMode.value = false;
             setUserPerks({id: 0, title: "", data: ""});
         } else {
             fetch(AppConfig.API_URL + `/perks/${perkId}`)
@@ -143,7 +159,7 @@ export default function PerksDetailsView() {
         }
 
         try {
-            await fetch(AppConfig.API_URL + '/perks/upload', {
+            await fetch(AppConfig.API_URL + (editMode.value ? `/perks/update/${perkId}` : '/perks/upload'), {
                 method: 'PUT',
                 headers: {
                     'Authorization': 'Bearer ' + auth.user?.access_token,
@@ -154,6 +170,8 @@ export default function PerksDetailsView() {
                 return response.json();
             }).then(data => {
                 enqueueSnackbar('Deck saved successfully', {variant: "success"})
+                editMode.value = false;
+                isBuildMode.value = false;
                 navigate('/perks/' + data.id);
             });
         } catch (error) {
@@ -162,12 +180,24 @@ export default function PerksDetailsView() {
         }
     }
 
+    function deleteDeck() {
+        fetch(AppConfig.API_URL + '/perks/' + perkId, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + auth.user?.access_token,
+            }
+        }).then(() => {
+            enqueueSnackbar('Deck deleted.', {variant: 'success', autoHideDuration: 6000});
+            navigate('/perks');
+        });
+    }
+
     return (
         <Stack marginBottom={5} marginX={{md: 5, xs: 0}}>
             <Stack display="flex" justifyContent="space-between" alignItems="center" marginBottom={3}>
                 <Typography variant="h2" color='black'
                             style={{textShadow: '-1px 0 white, 0 1px white, 1px 0 white, 0 -1px white'}}>
-                    {isBuildMode.value ? "Perk Builder" : userPerks?.title}
+                    {isBuildMode.value ? editMode.value ? 'Perks Editor' : "Perks Builder" : userPerks?.title}
                 </Typography>
                 <Typography variant="h5" color='black'></Typography>
             </Stack>
@@ -226,6 +256,29 @@ export default function PerksDetailsView() {
                             <Typography variant="h3" color="gold">Save</Typography>
                         </Button>
                     </>}
+                    {isBuildMode.value ? perkId != "-" && <RenderOnAuthenticated>
+                        <Button
+                            variant="contained" color="error"
+                            onClick={() => showDeleteDialog.value = true}>
+                            <Typography variant="h3"
+                                        color="gold">
+                                Delete
+                            </Typography>
+                        </Button>
+                    </RenderOnAuthenticated> : <RenderOnAuthenticated>
+                        <Button
+                            variant="contained" color="error"
+                            onClick={() => {
+                                editMode.value = true;
+                                isBuildMode.value = true;
+                                setTitle(userPerks?.title || "");
+                            }}>
+                            <Typography variant="h3"
+                                        color="gold">
+                                Edit
+                            </Typography>
+                        </Button>
+                    </RenderOnAuthenticated>}
                 </Stack>
 
             </Stack>
@@ -261,6 +314,22 @@ export default function PerksDetailsView() {
                         Import
                     </Button>
                 </Box>
+            </Dialog>
+            <Dialog
+                open={showDeleteDialog.value}
+                onClose={() => showDeleteDialog.value = false}
+            >
+                <DialogContentText sx={{padding: 2}}>
+                    Are you sure you want to delete this perk config?
+                </DialogContentText>
+                <DialogActions>
+                    <Button color="warning" onClick={() => showDeleteDialog.value = false}>
+                        Cancel
+                    </Button>
+                    <Button onClick={deleteDeck} color="error">
+                        Delete
+                    </Button>
+                </DialogActions>
             </Dialog>
         </Stack>
     );
