@@ -1,6 +1,6 @@
 import {Fab, FormControl, InputLabel, MenuItem, Pagination, Select, Stack} from "@mui/material";
 import {useEffect, useState} from "preact/hooks";
-import {PagedPerks, Perks} from "../types/types";
+import {PagedPerks, UserPerk} from "../types/types";
 import AddIcon from '@mui/icons-material/Add';
 import Box from "@mui/material/Box";
 import {AppConfig} from "../config.ts";
@@ -15,7 +15,7 @@ import PerksCard from "../components/PerksCard.tsx";
 import Typography from "@mui/material/Typography";
 
 export default function PerksView() {
-    const [perks, setPerks] = useState<Perks[]>([]);
+    const [perks, setPerks] = useState<UserPerk[]>([]);
     // @ts-ignore
     const [filter, setFilter] = useState('likes');
     const [ownedFilter, setOwnedFilter] = useState<String>('All');
