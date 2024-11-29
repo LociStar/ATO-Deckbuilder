@@ -69,6 +69,8 @@ export default function PerkGrid({data, selectedPerksRecord, disabled}: GridProp
         Array(numColumns).fill(null)
     );
     const lines: { from: { x: number; y: number }; to: { x: number; y: number } }[] = [];
+    const usedPoints = useSignal<number>(0)
+
 
     data &&
     data
@@ -123,6 +125,8 @@ export default function PerkGrid({data, selectedPerksRecord, disabled}: GridProp
                                     sprite={item.sprite}
                                     spriteBase={item.cost === 'PerkCostBase' ? 'silver' : 'gold'}
                                     disabled={disabled}
+                                    usedPoints={usedPoints}
+                                    isPreviousSelected={index == 0 ? useSignal(true) : (selectedPerksRecord.value[item.perkRequired] || useSignal(true))}
                                 />
                             ) :
                             item && <PerkNodeStack
@@ -136,6 +140,8 @@ export default function PerkGrid({data, selectedPerksRecord, disabled}: GridProp
                                 sprite={item.sprite}
                                 baseSprite={item.cost === 'PerkCostBase' ? 'silver' : 'gold'}
                                 disabled={disabled}
+                                usedPoints={usedPoints}
+                                isPreviousSelected={index == 0 ? useSignal(true) : (selectedPerksRecord.value[item.perkRequired] || useSignal(true))}
                             />}
                     </Box>
                 ))}
