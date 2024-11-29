@@ -79,4 +79,16 @@ export type PerkNodeProps = {
     row: number;
     sprite: string;
     type: number;
+    description: string;
+    iconTextValue: string;
+    customDescription: string;
+    maxHealth: number;
+    additionalCurrency: number;
+    additionalShards: number;
+    speedQuantity: number;
+    healQuantity: number;
+    energyBegin: number;
+    auraCurseBonus: string;
+    resistModified: string;
+    damageFlatBonus: string;
 };
