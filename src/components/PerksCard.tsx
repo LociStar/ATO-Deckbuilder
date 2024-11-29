@@ -1,11 +1,11 @@
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
-import {Perks} from "../types/types.tsx";
+import {UserPerk} from "../types/types.tsx";
 import {Button, Stack} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {alpha} from "@mui/material/styles";
 
-export default function PerksCard({perks}: { perks: Perks }) {
+export default function PerksCard({perks}: { perks: UserPerk }) {
     //const [likes, setLikes] = useState(0); // Add this line
     //setLikes(0);
     const navigate = useNavigate();
