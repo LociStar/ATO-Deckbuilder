@@ -1,4 +1,5 @@
 import {Card} from "../types/types.tsx";
+import {AppConfig} from "../config.ts";
 
 export function calculate_deck_cost(
     cardList: Card[],
@@ -53,3 +54,23 @@ export function calculate_deck_cost(
 
     return totalCost;
 }
+
+export async function getDescription(key: string): Promise<string> {
+    try {
+        const response = await fetch(`${AppConfig.API_URL}/description/${key}`, {
+            method: 'GET'
+        });
+
+        if (!response.ok) {
+            console.error('Error fetching description');
+            return ''; // return an empty string or handle the error as needed
+        }
+
+        const data = await response.json();
+        return data.description;
+    } catch (error) {
+        console.error('Error:', error);
+        return ''; // handle error case by returning an empty string or any other fallback value
+    }
+}
+
