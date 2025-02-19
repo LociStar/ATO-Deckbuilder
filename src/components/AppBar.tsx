@@ -154,7 +154,7 @@ export default function PrimarySearchAppBar() {
                 </Button>
                 <CustomSearch/>
                 <Box sx={{flexGrow: 1}}/>
-                <Chip color="success" label="Game Version 1.4.1" variant="outlined" sx={{mr: 2}}/>
+                <Chip color="success" label="Game Version 1.5.0" variant="outlined" sx={{mr: 2}}/>
                 <Box sx={{display: {xs: 'none', md: 'flex'}}}>
                     <IconButton
                         size="large"
