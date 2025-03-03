@@ -119,7 +119,6 @@ export function PerkNode({
                             sx={{width: cellSize, height: cellSize, alignItems: "center", justifyContent: "center"}}
                             display="flex"
                         >
-                            (
                             <>
                                 <img
                                     src={AppConfig.API_URL + "/perks/image/" + sprite}
@@ -141,7 +140,6 @@ export function PerkNode({
                                     loading="lazy"
                                 />
                             </>
-                            )
                         </Box>
                     </ButtonBase>
                 </Box>
