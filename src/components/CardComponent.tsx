@@ -11,7 +11,7 @@ export default function CardComponent({card, onCardClick}: {
     const [imageLoaded, setImageLoaded] = useState(false);
     const isMdScreenOrSmaller = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
     const CARD_WIDTH = isMdScreenOrSmaller ? 100 : 200;
-    const CARD_HEIGHT =  450 * (CARD_WIDTH / 297)
+    const CARD_HEIGHT = 450 * (CARD_WIDTH / 297)
 
     function handleImageLoaded() {
         setImageLoaded(true);
