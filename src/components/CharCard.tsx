@@ -34,7 +34,7 @@ export default function CharBuilds({deck}: { deck: Deck }) {
                 }}>
             <Box>
                 <img
-                    src={AppConfig.API_URL + `/character/image/${deck.characterId}`}
+                    src={AppConfig.API_URL + `/character/image/100_${deck.characterId}`}
                     alt={`Character ${deck.characterId}`}
                     style={{objectFit: 'contain', width: 50, margin: '10px'}}
                 />
