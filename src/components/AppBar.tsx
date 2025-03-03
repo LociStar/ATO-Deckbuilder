@@ -142,7 +142,7 @@ export default function PrimarySearchAppBar() {
                     <MenuIcon/>
                 </IconButton>
                 <Button onClick={() => navigate("/")}>
-                    <img style={{width: 45}} src={logo} alt="Logo"/>
+                    <img width={45} height={45} style={{width: 45}} src={logo} alt="Logo"/>
                     <Typography
                         variant="h6"
                         noWrap
