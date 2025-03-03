@@ -15,7 +15,7 @@ import RenderOnAnonymous from "./conditionals/RenderOnAnonymous.tsx";
 import CustomSearch from "./CustomSearch.tsx";
 import {AppState} from "../screens/ViewController.tsx";
 import AppBar from '@mui/material/AppBar';
-import logo from "../assets/LOGO_ATO.webp";
+import logo from "../assets/LOGO_ATO_small.webp";
 import {useNavigate} from "react-router-dom";
 import {Button, Chip} from "@mui/material";
 
