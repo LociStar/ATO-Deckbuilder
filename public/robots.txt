@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /cards-wiki
+Allow: /
+Allow: /perks
