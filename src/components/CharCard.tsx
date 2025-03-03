@@ -34,9 +34,11 @@ export default function CharBuilds({deck}: { deck: Deck }) {
                 }}>
             <Box>
                 <img
-                    src={AppConfig.API_URL + `/character/image/100_${deck.characterId}`}
+                    src={AppConfig.API_URL + `/character/image/70_${deck.characterId}`}
                     alt={`Character ${deck.characterId}`}
-                    style={{objectFit: 'contain', width: 50, margin: '10px'}}
+                    width={70}
+                    height={100}
+                    style={{objectFit: 'contain', width: 70, margin: '10px'}}
                 />
             </Box>
             <Stack marginLeft={4} alignItems="flex-start">
