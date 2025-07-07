@@ -21,6 +21,7 @@
     "notistack": "^3.0.1",
     "oidc-client-ts": "^3.0.1",
     "pako": "^2.1.0",
+    "parallax-js": "^3.1.0",
     "preact": "^10.22.0",
     "react-oidc-context": "^3.0.0",
     "react-router-dom": "^6.11.1",

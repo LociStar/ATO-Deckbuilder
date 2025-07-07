@@ -82,3 +82,15 @@
     left: 0;
     z-index: -1;
 }
+
+.responsive-image {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    /* 110vw wide but still centered */
+    width: 101vw;
+    height: auto;
+
+    /* For zooming from center */
+    transform-origin: center center;
+}

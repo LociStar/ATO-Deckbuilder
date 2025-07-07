@@ -72,25 +72,25 @@ const theme = responsiveFontSizes(createTheme({
 }));
 export function App() {
 
-    useEffect(() => {
-        const handleMouseMove = (event: MouseEvent) => {
-            if ('ontouchstart' in window) {
-                return;
-            }
-            const x = event.clientX;
-            const width = window.innerWidth;
-            const percentage = ((x / width) * 2) - 1; // calculate percentage from -5% to 5%
-            const adjustedPercentage = 50 + percentage; // adjust the default position (50%) by the calculated percentage
-            document.body.style.setProperty('--mouse-x', `${adjustedPercentage}%`);
-        };
-
-        window.addEventListener('mousemove', handleMouseMove);
-
-        // Clean up the event listener when the component is unmounted
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-        };
-    }, []);
+    // useEffect(() => {
+    //     const handleMouseMove = (event: MouseEvent) => {
+    //         if ('ontouchstart' in window) {
+    //             return;
+    //         }
+    //         const x = event.clientX;
+    //         const width = window.innerWidth;
+    //         const percentage = ((x / width) * 2) - 1; // calculate percentage from -5% to 5%
+    //         const adjustedPercentage = 50 + percentage; // adjust the default position (50%) by the calculated percentage
+    //         document.body.style.setProperty('--mouse-x', `${adjustedPercentage}%`);
+    //     };
+    //
+    //     window.addEventListener('mousemove', handleMouseMove);
+    //
+    //     // Clean up the event listener when the component is unmounted
+    //     return () => {
+    //         window.removeEventListener('mousemove', handleMouseMove);
+    //     };
+    // }, []);
 
     return (
 

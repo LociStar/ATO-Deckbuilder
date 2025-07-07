@@ -11,6 +11,7 @@ import PrivacyPolicy from "./PrivacyPolicyView.tsx";
 import DeckEditor from "./DeckEditorView.tsx";
 import PerksView from "./PerksView.tsx";
 import PerksDetailsView from "./PerksDetailsView.tsx";
+import MainView from "./MainView.tsx";
 
 export const AppState = createContext(createAppState());
 
@@ -23,7 +24,7 @@ export default function ViewController() {
             children: [
                 {
                     path: "/",
-                    element: <DecksView/>,
+                    element: <MainView/>,
                 },
                 {
                     path: "/deck/*",

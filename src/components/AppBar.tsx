@@ -129,7 +129,7 @@ export default function PrimarySearchAppBar() {
         </Menu>
     );
 
-    return (<AppBar position={"sticky"} sx={{mb: 2}}>
+    return (<AppBar position={"sticky"} >
             <Toolbar>
                 <IconButton
                     size="large"
