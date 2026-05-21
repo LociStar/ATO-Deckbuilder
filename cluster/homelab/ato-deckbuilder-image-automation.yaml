@@ -1,0 +1,50 @@
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: ato-deckbuilder
+  namespace: flux-system
+spec:
+  image: ghcr.io/locistar/ato-deckbuilder-web
+  interval: 1m
+  secretRef:
+    name: ghcr-credentials
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: ato-deckbuilder
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: ato-deckbuilder
+  filterTags:
+    # Match tags like: 20260413120000-abc123...
+    pattern: '^[0-9]{14}-[0-9a-z]{40}$'
+  policy:
+    alphabetical:
+      order: asc
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageUpdateAutomation
+metadata:
+  name: ato-deckbuilder
+  namespace: flux-system
+spec:
+  interval: 5m
+  sourceRef:
+    kind: GitRepository
+    name: ato-deckbuilder
+  git:
+    checkout:
+      ref:
+        branch: master
+    commit:
+      author:
+        name: fluxcdbot
+        email: fluxcdbot@users.noreply.github.com
+      messageTemplate: "chore(ato-deckbuilder): update image"
+    push:
+      branch: master
+  update:
+    path: ./cluster/homelab
+    strategy: Setters

@@ -1,41 +1,49 @@
-name: Docker
+name: build-and-push
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
+    # Don't rebuild when Flux only bumps the image tag in cluster/
+    paths-ignore:
+      - 'cluster/**'
+      - 'clusters/**'
+      - '**/*.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   build:
+    # Skip commits made by Flux image-update automation
+    if: github.actor != 'fluxcdbot'
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Get version
-        id: prev_version
-        run: |
-          echo "PREV_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+      - uses: docker/setup-buildx-action@v3
 
-      - name:  'Automated Version Bump'
-        id: bump_version
-        uses:  'phips28/gh-action-bump-version@v11.0.4'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/login-action@v3
         with:
-          minor-wording:  '#minor'
-          major-wording:  '#major'
-          patch-wording:  '#patch'
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get version
-        id: new_version
+      - name: Compute image tag
+        id: meta
         run: |
-          echo "NEW_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+          ts=$(date -u +%Y%m%d%H%M%S)
+          echo "tag=${ts}-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
 
-      - name: Build and push Docker image
-        run: |
-          echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin ghcr.io
-          docker build -t ghcr.io/locistar/ato-deckbuilder-web:${{ env.NEW_VERSION }} .
-          docker push ghcr.io/locistar/ato-deckbuilder-web:${{ env.NEW_VERSION }}
-        if: env.PREV_VERSION != ${{ env.NEW_VERSION }}
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/locistar/ato-deckbuilder-web:${{ steps.meta.outputs.tag }}
+            ghcr.io/locistar/ato-deckbuilder-web:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
