@@ -4,16 +4,16 @@ metadata:
   name: ato-deckbuilder
   namespace: ato-deckbuilder
   labels:
-    app: ato-deckbuilder
+    app: ato-deckbuilder-web
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ato-deckbuilder
+      app: ato-deckbuilder-web
   template:
     metadata:
       labels:
-        app: ato-deckbuilder
+        app: ato-deckbuilder-web
     spec:
       imagePullSecrets:
         - name: ghcr-secret
@@ -51,10 +51,10 @@ metadata:
   name: ato-deckbuilder
   namespace: ato-deckbuilder
   labels:
-    app: ato-deckbuilder
+    app: ato-deckbuilder-web
 spec:
   selector:
-    app: ato-deckbuilder
+    app: ato-deckbuilder-web
   ports:
     - name: http
       port: 80
