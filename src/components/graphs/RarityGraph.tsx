@@ -1,82 +1,66 @@
 import {BarChart} from '@mui/x-charts/BarChart';
 import {Card} from "../../types/types.tsx";
 import {useEffect, useState} from "preact/hooks";
+import {C} from "../directionC/tokens.ts";
 
 type RarityGraphProps = {
     cardList: Card[];
+    height?: number;
 };
 
-const rarityColors = {
-    'Common': '#cccccc',
-    'Uncommon': '#45c24a',
-    'Rare': '#1471e8',
-    'Epic': '#b434ac',
-    'Mythic': '#ffb72b'
+const RARITIES = ['Common', 'Uncommon', 'Rare', 'Epic', 'Mythic'] as const;
+type Rarity = typeof RARITIES[number];
+
+const rarityColors: Record<Rarity, string> = {
+    Common: '#b8bdc7',
+    Uncommon: '#5ec07e',
+    Rare: '#4aa8e8',
+    Epic: '#b985e4',
+    Mythic: '#e8a04a',
 };
 
-export const RarityGraph: React.FC<RarityGraphProps> = ({cardList}) => {
-    const [rarityDataset, setRarityDataset] =
-        useState<{ 'Common': number, 'Uncommon': number, 'Rare': number, 'Epic': number, 'Mythic': number }>({
-            'Common': 0,
-            'Uncommon': 0,
-            'Rare': 0,
-            'Epic': 0,
-            'Mythic': 0
-        });
+export const RarityGraph: React.FC<RarityGraphProps> = ({cardList, height = 220}) => {
+    const [counts, setCounts] = useState<Record<Rarity, number>>({
+        Common: 0, Uncommon: 0, Rare: 0, Epic: 0, Mythic: 0,
+    });
 
     useEffect(() => {
-        const rarities = {
-            'Common': 0,
-            'Uncommon': 0,
-            'Rare': 0,
-            'Epic': 0,
-            'Mythic': 0
-        };
-
-        cardList.forEach((card: Card) => {
-            rarities[card.rarity]++;
+        const next: Record<Rarity, number> = {Common: 0, Uncommon: 0, Rare: 0, Epic: 0, Mythic: 0};
+        cardList.forEach((c) => {
+            next[c.rarity] = (next[c.rarity] ?? 0) + 1;
         });
-
-        setRarityDataset(rarities);
+        setCounts(next);
     }, [cardList]);
+
     return (
-        <BarChart height={300}
-                  slotProps={{
-                      legend: {
-                          direction: 'row',
-                          position: {vertical: 'bottom', horizontal: 'middle'},
-                          itemMarkHeight: 5,
-                      },
-                  }}
-                  series={[
-                      {
-                          label: 'Common',
-                          data: [rarityDataset['Common']],
-                          color: rarityColors['Common'],
-                      },
-                      {
-                          label: 'Uncommon',
-                          data: [rarityDataset['Uncommon']],
-                          color: rarityColors['Uncommon'],
-                      },
-                      {
-                          label: 'Rare',
-                          data: [rarityDataset['Rare']],
-                          color: rarityColors['Rare'],
-                      },
-                      {
-                          label: 'Epic',
-                          data: [rarityDataset['Epic']],
-                          color: rarityColors['Epic'],
-                      },
-                      {
-                          label: 'Mythic',
-                          data: [rarityDataset['Mythic']],
-                          color: rarityColors['Mythic'],
-                      },
-                  ]}
-                  xAxis={[{scaleType: 'band', data: ['Rarity']}]}
-                  yAxis={[{scaleType: 'linear', label: 'Amount', tickMinStep: 1, tickMaxStep: 2}]}
+        <BarChart
+            height={height}
+            margin={{top: 10, right: 10, bottom: 50, left: 36}}
+            series={RARITIES.map((r) => ({
+                label: r,
+                data: [counts[r]],
+                color: rarityColors[r],
+            }))}
+            xAxis={[{scaleType: 'band', data: ['Rarity']}]}
+            yAxis={[{tickMinStep: 1}]}
+            sx={{
+                color: C.inkDim,
+                '& text': {fill: C.inkDim},
+                '& .MuiChartsAxis-tickLabel text, & .MuiChartsAxis-tickLabel': {fill: `${C.inkDim} !important`, fontFamily: C.mono, fontSize: 10},
+                '& .MuiChartsAxis-label text, & .MuiChartsAxis-label': {fill: `${C.inkSoft} !important`, fontFamily: C.display, fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase'},
+                '& .MuiChartsAxis-line': {stroke: C.ink},
+                '& .MuiChartsAxis-tick': {stroke: C.ink},
+                '& .MuiChartsGrid-line': {stroke: C.inkMute, opacity: 0.2},
+                '& .MuiBarElement-root': {stroke: C.ink, strokeWidth: 1.5},
+            }}
+            slotProps={{
+                legend: {
+                    direction: 'row',
+                    position: {vertical: 'bottom', horizontal: 'middle'},
+                    itemMarkHeight: 5,
+                    labelStyle: {fontFamily: C.mono, fontSize: 10, fill: C.inkDim},
+                },
+            }}
         />
     );
 };

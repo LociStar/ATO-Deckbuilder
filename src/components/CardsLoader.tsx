@@ -1,15 +1,20 @@
 import {useState, useEffect, useContext} from 'preact/hooks';
+import {JSX} from 'preact';
 import {Button, Stack, Theme, useMediaQuery} from "@mui/material";
 import {Card} from "../types/types.tsx";
 import CardComponent from "../components/CardComponent.tsx";
 import {AppState} from "../screens/ViewController.tsx";
 import {AppConfig} from "../config.ts";
+import {C} from "./directionC/tokens.ts";
 
-export default function CardsLoader({charClass, secondaryCharClass, fixed_buttons, onCardClick}: {
+export default function CardsLoader({charClass, secondaryCharClass, fixed_buttons, onCardClick, renderCard, gridStyle, parchmentButtons}: {
     charClass: string,
     secondaryCharClass: string,
     fixed_buttons: boolean,
-    onCardClick: (card: Card) => void
+    onCardClick: (card: Card) => void,
+    renderCard?: (card: Card, onCardClick: (card: Card) => void) => JSX.Element,
+    gridStyle?: JSX.CSSProperties,
+    parchmentButtons?: boolean,
 }) {
     const [cards, setCards] = useState<Card[]>([]);
     const [page, setPage] = useState(0);
@@ -64,32 +69,62 @@ export default function CardsLoader({charClass, secondaryCharClass, fixed_button
         };
     }, [page, charClass, secondaryCharClass, searchText.value, fixed_buttons]);
 
+    const parchmentBtnSx = {
+        padding: '6px 14px',
+        fontFamily: C.display,
+        fontSize: '11px',
+        fontWeight: 700,
+        letterSpacing: '0.16em',
+        textTransform: 'uppercase' as const,
+        background: C.cream,
+        color: C.inkSoft,
+        border: `1.5px solid ${C.ink}`,
+        borderRadius: '2px',
+        boxShadow: `0 1.5px 0 ${C.ink}`,
+        minWidth: 0,
+        '&:hover': {background: C.creamHi},
+    };
+
     return (
         <Stack direction="column">
-            <div style={{
+            <div style={gridStyle ?? {
                 display: 'grid',
                 gridTemplateColumns: isMdScreenOrSmaller ? 'repeat(auto-fit, minmax(100px, 1fr))' : 'repeat(auto-fit, minmax(200px, 1fr))',
                 gridGap: '10px'
             }}>
                 {cards.map((card) => (
-                    <CardComponent card={card} onCardClick={onCardClick}/>
+                    renderCard
+                        ? renderCard(card, onCardClick)
+                        : <CardComponent card={card} onCardClick={onCardClick}/>
                 ))}
             </div>
-            {fixed_buttons ? (
-                <Stack spacing={{xs: 1, sm: 2}} sx={{marginTop: 2}} direction="row" justifyContent={"center"}
-                       useFlexGap>
-                    <Button variant="contained" onClick={() => setPage(oldPage => Math.max(oldPage - 1, 0))}>Previous
-                        page</Button>
-                    <Button variant="contained" onClick={() => setPage(oldPage => oldPage + 1)}>Next page</Button>
-                </Stack>
-            ) : (
-                <Stack spacing={{xs: 1, sm: 2}} sx={{marginTop: 2}} direction="row"
-                       justifyContent={"center"} marginBottom="10px" useFlexGap flexWrap="wrap">
-                    <Button variant="contained" onClick={() => setPage(oldPage => Math.max(oldPage - 1, 0))}>Previous
-                        page</Button>
-                    <Button variant="contained" onClick={() => setPage(oldPage => oldPage + 1)}>Next page</Button>
-                </Stack>
-            )}
+            <Stack
+                spacing={{xs: 1, sm: 2}}
+                sx={{marginTop: 2}}
+                direction="row"
+                justifyContent="center"
+                marginBottom={fixed_buttons ? undefined : "10px"}
+                useFlexGap
+                flexWrap={fixed_buttons ? undefined : "wrap"}
+            >
+                {parchmentButtons ? (
+                    <>
+                        <Button
+                            sx={parchmentBtnSx}
+                            onClick={() => setPage(oldPage => Math.max(oldPage - 1, 0))}
+                        >← Previous</Button>
+                        <Button
+                            sx={parchmentBtnSx}
+                            onClick={() => setPage(oldPage => oldPage + 1)}
+                        >Next →</Button>
+                    </>
+                ) : (
+                    <>
+                        <Button variant="contained" onClick={() => setPage(oldPage => Math.max(oldPage - 1, 0))}>Previous page</Button>
+                        <Button variant="contained" onClick={() => setPage(oldPage => oldPage + 1)}>Next page</Button>
+                    </>
+                )}
+            </Stack>
         </Stack>
     );
 }

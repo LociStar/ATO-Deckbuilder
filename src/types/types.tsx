@@ -1,4 +1,57 @@
-type Rarity = 'Common' | 'Uncommon' | 'Rare' | 'Epic' | 'Mythic';
+export type Rarity = 'Common' | 'Uncommon' | 'Rare' | 'Epic' | 'Mythic';
+
+export type LibraryCategory = 'hero' | 'monster' | 'item' | 'boon' | 'injury' | 'special';
+
+export type LibraryTier = {
+    rarity: Rarity;
+    cost: number;
+    cardId: string;
+    description: string | null;
+};
+
+export type LibraryEntry = {
+    name: string;
+    letter: string;
+    category: LibraryCategory;
+    class: string;
+    type: string;
+    target: string;
+    tiers: LibraryTier[];
+    tags: string[];
+    firstChapter: number | null;
+    sources: string[];
+};
+
+export type LibraryFacetCounts = {
+    rarity: Record<string, number>;
+    class: Record<string, number>;
+    type: Record<string, number>;
+    category: Record<string, number>;
+};
+
+export type PagedLibrary = {
+    entries: LibraryEntry[];
+    page: number;
+    pages: number;
+    total: number;
+    letterCounts: Record<string, number>;
+    facetCounts: LibraryFacetCounts;
+};
+
+export type LibraryStats = {
+    total: number;
+    tiers: number;
+    heroes: number;
+    monsters: number;
+    items: number;
+    boons: number;
+    injuries: number;
+    specials: number;
+    gameVersion: string | null;
+    updatedAt: string | null;
+    knownTypes: string[];
+    knownClasses: string[];
+};
 
 export type Card = {
     id: string;
@@ -19,6 +72,11 @@ export type Deck = {
     likes: number;
     characterId: string;
     cardList: Card[];
+    // Optional metadata shown on the deck card. Populated by the backend
+    // when available; UI falls back to computed values or hides the badge.
+    shards?: number;
+    difficulty?: string;
+    tags?: string[];
 };
 
 export type PagedDeck = {

@@ -1,11 +1,5 @@
-import CardsLoader from "../components/CardsLoader";
+import LibraryView from '../components/directionC/library/LibraryView';
 
 export default function CardsView() {
-    return (
-        <CardsLoader fixed_buttons={false}
-                     charClass={''}
-                     secondaryCharClass={''}
-                     onCardClick={() => {
-                     }}/>
-    );
+    return <LibraryView />;
 }
