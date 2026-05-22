@@ -3,6 +3,7 @@ import {C} from '../tokens';
 import {AppConfig} from '../../../config';
 import {LibraryEntry} from '../../../types/types';
 import {formatType, RARITY, RARITY_ORDER} from './rarity';
+import {StainedFrame} from '../primitives';
 
 function MetaCell({label, value}: { label: string; value: string }) {
     return (
@@ -148,6 +149,42 @@ export default function WikiDetailPanel({entry}: { entry: LibraryEntry | null })
                     <MetaCell label="Category" value={entry.category}/>
                 </div>
             </div>
+
+            {entry.sources.length > 0 && (
+                <div style={{
+                    padding: '12px 14px',
+                    background: C.creamHi,
+                    borderTop: `1.5px solid ${C.ink}`,
+                }}>
+                    <div style={{
+                        fontFamily: C.display, fontSize: 9, color: C.inkDim,
+                        letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 700,
+                        marginBottom: 8,
+                    }}>Found in starting Decks of</div>
+                    <div style={{
+                        display: 'flex', flexWrap: 'wrap', gap: 10,
+                    }}>
+                        {entry.sources.map((characterId) => (
+                            <div
+                                key={characterId}
+                                title={characterId}
+                                style={{
+                                    display: 'flex', flexDirection: 'column',
+                                    alignItems: 'center', gap: 4,
+                                    width: 56,
+                                }}>
+                                <StainedFrame characterId={characterId} size={40} rounded={3}/>
+                                <div style={{
+                                    fontFamily: C.serif, fontSize: 10.5, color: C.ink,
+                                    fontWeight: 600, textAlign: 'center',
+                                    whiteSpace: 'nowrap', overflow: 'hidden',
+                                    textOverflow: 'ellipsis', maxWidth: '100%',
+                                }}>{characterId}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {/* actions (placeholders) */}
             <div hidden style={{
