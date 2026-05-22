@@ -2,62 +2,41 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import {useContext} from "preact/hooks";
 import {AppState} from "../screens/ViewController.tsx"
-import {Link, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "react-oidc-context";
-import {enqueueSnackbar} from "notistack";
 import {C} from './directionC/tokens';
+import {PRIMARY_TABS, attemptNavigate} from './directionC/navItems';
 import logo from '../assets/LOGO_ATO_small.webp';
 
 type DrawerItem = {
     label: string;
     onClick?: () => void;
-    to?: string;
+    href?: string;
     external?: boolean;
+    active?: boolean;
 };
 
 export default function TemporaryDrawer() {
     const auth = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
     const state = useContext(AppState);
 
     const close = () => { state.appMenuOpen.value = false; };
 
-    function handleDeckbuilderClick() {
-        if (auth.user) {
-            navigate('/deckbuilder');
-        } else {
-            enqueueSnackbar('You need to be logged in to create decks', {
-                variant: 'error',
-                autoHideDuration: 5000
-            });
-        }
-    }
+    const primaryItems: DrawerItem[] = PRIMARY_TABS.map((tab) => ({
+        label: tab.label,
+        active: tab.matcher(location.pathname),
+        onClick: () => attemptNavigate(tab, auth.isAuthenticated, navigate),
+    }));
 
     const sections: Array<{title: string; items: DrawerItem[]}> = [
+        {title: 'Navigate', items: primaryItems},
         {
-            title: 'Decks',
+            title: 'More',
             items: [
-                {label: 'Deck Guides', to: '/'},
-                {label: 'Deck Builder', onClick: handleDeckbuilderClick},
-            ],
-        },
-        {
-            title: 'Perks',
-            items: [
-                {label: 'Perks Guides', to: '/perks'},
-                {label: 'Perk Builder', to: '/perks/-'},
-            ],
-        },
-        {
-            title: 'Reference',
-            items: [
-                {label: 'Cards Wiki', to: '/cards-wiki'},
-            ],
-        },
-        {
-            title: '',
-            items: [
-                {label: 'Support', to: 'https://github.com/LociStar/ATO-Deckbuilder', external: true},
+                {label: 'Perk Builder', onClick: () => navigate('/perks/-')},
+                {label: 'Support', href: 'https://github.com/LociStar/ATO-Deckbuilder', external: true},
             ],
         },
     ];
@@ -71,33 +50,24 @@ export default function TemporaryDrawer() {
             fontWeight: 600,
             letterSpacing: '0.16em',
             textTransform: 'uppercase' as const,
-            color: C.ink,
+            color: item.active ? C.amberDeep : C.ink,
             textDecoration: 'none',
             cursor: 'pointer',
-            borderLeft: '3px solid transparent',
+            borderLeft: item.active ? `3px solid ${C.amber}` : '3px solid transparent',
+            background: item.active ? C.parchment : 'transparent',
         };
         const handleHover = (e: any, on: boolean) => {
+            if (item.active) return;
             (e.currentTarget as HTMLElement).style.background = on ? C.parchment : 'transparent';
             (e.currentTarget as HTMLElement).style.borderLeftColor = on ? C.amber : 'transparent';
             (e.currentTarget as HTMLElement).style.color = on ? C.amberDeep : C.ink;
         };
 
-        if (item.onClick) {
-            return (
-                <div
-                    key={item.label}
-                    style={baseStyle}
-                    onClick={() => { item.onClick!(); close(); }}
-                    onMouseEnter={(e) => handleHover(e, true)}
-                    onMouseLeave={(e) => handleHover(e, false)}
-                >{item.label}</div>
-            );
-        }
         if (item.external) {
             return (
                 <a
                     key={item.label}
-                    href={item.to}
+                    href={item.href}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={close}
@@ -108,14 +78,13 @@ export default function TemporaryDrawer() {
             );
         }
         return (
-            <Link
+            <div
                 key={item.label}
-                to={item.to!}
-                onClick={close}
-                onMouseEnter={(e: any) => handleHover(e, true)}
-                onMouseLeave={(e: any) => handleHover(e, false)}
-                style={baseStyle as any}
-            >{item.label}</Link>
+                style={baseStyle}
+                onClick={() => { item.onClick?.(); close(); }}
+                onMouseEnter={(e) => handleHover(e, true)}
+                onMouseLeave={(e) => handleHover(e, false)}
+            >{item.label}</div>
         );
     }
 

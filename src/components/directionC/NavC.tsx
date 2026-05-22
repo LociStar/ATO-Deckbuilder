@@ -8,14 +8,8 @@ import {AppState} from '../../screens/ViewController';
 import RenderOnAuthenticated from '../conditionals/RenderOnAuthenticated';
 import RenderOnAnonymous from '../conditionals/RenderOnAnonymous';
 import {C} from './tokens';
+import {PRIMARY_TABS, attemptNavigate} from './navItems';
 import logo from '../../assets/LOGO_ATO_small.webp';
-
-const TABS: Array<[string, string, (path: string) => boolean]> = [
-    ['/',           'Guild Hall', (p) => p === '/' || p.startsWith('/deck')],
-    ['/deckbuilder','Forge',      (p) => p.startsWith('/deckbuilder') || p.startsWith('/deckeditor')],
-    ['/cards-wiki', 'Library',    (p) => p.startsWith('/cards-wiki')],
-    ['/perks',      'Tomes',      (p) => p.startsWith('/perks')],
-];
 
 export default function NavC() {
     const state = useContext(AppState);
@@ -127,12 +121,12 @@ export default function NavC() {
             {/* Primary tabs (desktop only) */}
             {!isCompact && (
                 <div style={{display: 'flex', gap: 2, marginLeft: 36}}>
-                    {TABS.map(([path, label, matcher]) => {
-                        const active = matcher(location.pathname);
+                    {PRIMARY_TABS.map((tab) => {
+                        const active = tab.matcher(location.pathname);
                         return (
                             <div
-                                key={path}
-                                onClick={() => navigate(path)}
+                                key={tab.path}
+                                onClick={() => attemptNavigate(tab, auth.isAuthenticated, navigate)}
                                 style={{
                                     padding: '8px 14px',
                                     fontFamily: C.display,
@@ -145,7 +139,7 @@ export default function NavC() {
                                     fontWeight: 600,
                                     userSelect: 'none',
                                 }}
-                            >{label}</div>
+                            >{tab.label}</div>
                         );
                     })}
                 </div>

@@ -386,16 +386,6 @@ export function StainedFrame({
             boxShadow: `inset 0 0 0 2px ${accent}, 0 2px 0 ${C.ink}`,
             background: C.cream,
         }}>
-            <img
-                src={AppConfig.API_URL + `/character/image/${characterId}`}
-                alt={`Character ${characterId}`}
-                style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    display: 'block',
-                }}
-            />
             <svg
                 width="100%"
                 height="100%"
@@ -418,6 +408,18 @@ export function StainedFrame({
                     fill="none"
                 />
             </svg>
+            <img
+                src={AppConfig.API_URL + `/character/image/${characterId}`}
+                alt={`Character ${characterId}`}
+                style={{
+                    position: 'relative',
+                    zIndex: 1,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                }}
+            />
         </div>
     );
 }
